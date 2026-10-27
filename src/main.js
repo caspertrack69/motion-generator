@@ -1,29 +1,12 @@
 import { gsap } from 'gsap';
 import './styles.css';
-import scenesData from '../scenes.json';
 import { buildSubtitles } from './subtitles.js';
 import { createStack } from './components.js';
 import { buildStackSequence } from './stackSequence.js';
 import { beatsFor, sceneWindows } from './timing.js';
-import { build as s01 } from './scenes/s01_hook.js';
-import { build as s02 } from './scenes/s02_rce.js';
-import { build as s03 } from './scenes/s03_patch.js';
-import { build as s04 } from './scenes/s04_flaw1_use_cache.js';
-import { build as s05 } from './scenes/s05_flaw2_librsvg.js';
-import { build as s06 } from './scenes/s06_insight_dependency.js';
-import { build as s07 } from './scenes/s07_fix.js';
-import { build as s08 } from './scenes/s08_closing.js';
+import { TEMPLATES } from './templates/index.js';
 
-const BUILDERS = {
-  s01_hook: s01,
-  s02_rce: s02,
-  s03_patch: s03,
-  s04_flaw1_use_cache: s04,
-  s05_flaw2_librsvg: s05,
-  s06_insight_dependency: s06,
-  s07_fix: s07,
-  s08_closing: s08,
-};
+const DEFAULT_VIDEO = 'nextjs-rce';
 
 const TOKENS = {
   bg: '#0B1220',
@@ -36,25 +19,8 @@ const TOKENS = {
   ok: '#3FD2A0',
 };
 
-const overrideModules = import.meta.glob('../timing.override.json', {
-  eager: true,
-  import: 'default',
-});
-const overrides = overrideModules['../timing.override.json'] || {};
-
-const audioTimingModules = import.meta.glob('../timing.json', {
-  eager: true,
-  import: 'default',
-});
-const audioTiming = audioTimingModules['../timing.json'] || {};
-
-const wordsModules = import.meta.glob('../words.json', {
-  eager: true,
-  import: 'default',
-});
-const audioWords = wordsModules['../words.json'] || null;
-
 const params = new URLSearchParams(window.location.search);
+const videoSlug = params.get('video') || DEFAULT_VIDEO;
 const isRender = params.get('render') === '1';
 const isDev = params.get('dev') === '1';
 const showSafe = params.get('safe') === '1';
@@ -65,10 +31,51 @@ const playBtn = document.getElementById('playpause');
 const scrubber = document.getElementById('scrubber');
 const timecode = document.getElementById('timecode');
 
+// Setiap video punya folder sendiri di videos/<slug>/. Glob dipakai supaya
+// Vite tahu file mana saja yang tersedia; file dipilih lewat ?video=<slug>.
+const videoFiles = {
+  scenes: import.meta.glob('../videos/*/scenes.json'),
+  timing: import.meta.glob('../videos/*/timing.json'),
+  words: import.meta.glob('../videos/*/words.json'),
+  override: import.meta.glob('../videos/*/timing.override.json'),
+};
+
+function findLoader(kind, slug, file) {
+  const map = videoFiles[kind];
+  const suffix = `/videos/${slug}/${file}`;
+  const key = Object.keys(map).find((path) => path.endsWith(suffix));
+  return key ? map[key] : null;
+}
+
+async function readJson(kind, slug, file) {
+  const loader = findLoader(kind, slug, file);
+  if (!loader) return null;
+  const module = await loader();
+  return module.default ?? module;
+}
+
+async function loadVideo(slug) {
+  const scenesData = await readJson('scenes', slug, 'scenes.json');
+  if (!scenesData) {
+    throw new Error(`Video "${slug}" tidak ditemukan. Diharapkan videos/${slug}/scenes.json.`);
+  }
+  const [timingData, wordsData, overrideData] = await Promise.all([
+    readJson('timing', slug, 'timing.json'),
+    readJson('words', slug, 'words.json'),
+    readJson('override', slug, 'timing.override.json'),
+  ]);
+  return {
+    scenesData,
+    audioTiming: timingData || {},
+    audioWords: wordsData || null,
+    overrides: overrideData || {},
+  };
+}
+
 gsap.ticker.lagSmoothing(0);
 gsap.defaults({ ease: 'power3.out', duration: 0.55 });
 
-function applyTiming(data) {
+function applyTiming(data, audioTiming, overrides) {
   const overridesById = overrides.scenes || overrides;
   return data.scenes.map((scene) => {
     const patch = overridesById[scene.id] || {};
@@ -125,7 +132,16 @@ function formatTime(t) {
   return `${String(m).padStart(2, '0')}:${s.toFixed(1).padStart(4, '0')}`;
 }
 
-async function bootstrap() {
+// Scene pertama dengan template `stack` adalah intro diagram, scene kedua
+// adalah insight. Beats-nya dipisah karena durasi storyboard keduanya beda.
+function beatsKeyFor(scene, stackScenes) {
+  if (scene.template !== 'stack') return scene.template;
+  return stackScenes[0] === scene ? 'stack_intro' : 'stack_insight';
+}
+
+async function bootstrap(video) {
+  const { scenesData, audioTiming, audioWords, overrides } = video;
+
   stage.innerHTML = '';
   const bg = document.createElement('div');
   bg.className = 'stage-bg';
@@ -133,11 +149,11 @@ async function bootstrap() {
   scenesEl.className = 'scenes';
   stage.append(bg, scenesEl);
 
-  const scenes = applyTiming(scenesData);
+  const scenes = applyTiming(scenesData, audioTiming, overrides);
   const totalDuration = scenes[scenes.length - 1].time.end;
   const windows = sceneWindows(scenes);
 
-  const stack = createStack();
+  const stack = createStack(scenesData.stack || {});
   stage.append(stack.viewport);
   stack.viewport.style.opacity = '0';
   stack.viewport.style.display = 'none';
@@ -146,19 +162,35 @@ async function bootstrap() {
   master.set({}, {}, 0);
   const sceneClips = [];
 
-  const stackScene = scenes.find((scene) => scene.id === 's05_flaw2_librsvg');
-  if (stackScene) {
-    master.add(buildStackSequence(stack, TOKENS, windows), stackScene.time.start);
+  const stackScenes = scenes.filter((scene) => scene.template === 'stack');
+  const checklistScene = scenes.find((scene) => scene.template === 'checklist') || null;
+  const closingScene = scenes.find((scene) => scene.template === 'closing') || null;
+  const stackRoles = {
+    intro: stackScenes[0] ? windows[stackScenes[0].id] : null,
+    insight: stackScenes[1] ? windows[stackScenes[1].id] : null,
+    gap: checklistScene ? windows[checklistScene.id] : null,
+    closing: closingScene ? windows[closingScene.id] : null,
+  };
+  const stackReady = Boolean(stackRoles.intro && stackRoles.insight && stackRoles.closing);
+  if (stackReady) {
+    master.add(buildStackSequence(stack, TOKENS, stackRoles), stackRoles.intro.start);
+  } else if (stackScenes.length) {
+    console.warn(
+      'Template "stack" butuh 2 scene stack + 1 scene closing; diagram stack dilewati.'
+    );
   }
 
   scenes.forEach((scene) => {
-    const builder = BUILDERS[scene.id];
-    if (!builder) return;
+    const builder = TEMPLATES[scene.template];
+    if (!builder) {
+      console.warn(`Template "${scene.template}" tidak dikenal (scene ${scene.id}), dilewati.`);
+      return;
+    }
     const duration = scene.time.end - scene.time.start;
     // Build at the designed length, then rescale the whole scene timeline to
     // the audio-derived length so internal choreography follows the voice over.
     const buildDuration = scene.audioTimed ? scene.designDuration : duration;
-    const beats = beatsFor(scene.id, buildDuration);
+    const beats = beatsFor(beatsKeyFor(scene, stackScenes), buildDuration);
     const sceneTl = builder(scenesEl, TOKENS, {
       duration: buildDuration,
       stack,
@@ -178,7 +210,7 @@ async function bootstrap() {
       // newDuration / lastTweenEnd and stretch short intro timelines wildly.
       sceneTl.set({}, {}, buildDuration);
     }
-    if (root && scene.id !== 's08_closing') {
+    if (root && scene.template !== 'closing') {
       sceneTl.fromTo(
         root,
         { opacity: 1, y: 0 },
@@ -201,12 +233,11 @@ async function bootstrap() {
   const subtitles = buildSubtitles(master, scenes, audioWords);
   stage.append(subtitles);
 
-  const stackWindow = { start: 27, end: 62 };
-  if (windows.s05_flaw2_librsvg) stackWindow.start = windows.s05_flaw2_librsvg.start;
-  if (windows.s08_closing) stackWindow.end = windows.s08_closing.end;
-  const stackGap = windows.s07_fix
-    ? { start: windows.s07_fix.start, end: windows.s07_fix.end }
-    : null;
+  const stackWindow = {
+    start: stackRoles.intro ? stackRoles.intro.start : totalDuration,
+    end: stackRoles.closing ? stackRoles.closing.end : totalDuration,
+  };
+  const stackGap = stackRoles.gap;
 
   const updateVisibility = (t) => {
     const inWindow = t >= stackWindow.start - 1e-6 && t < stackWindow.end - 1e-6;
@@ -306,12 +337,16 @@ async function bootstrap() {
     return new Promise((resolve) => requestAnimationFrame(() => resolve()));
   };
   window.__ready = Promise.resolve(true);
-  return master;
+  // Jangan kembalikan timeline: GSAP timeline bersifat thenable, sehingga
+  // `await bootstrap()` akan menunggu timeline selesai (dan master ini paused).
+  return undefined;
 }
+
 async function start() {
   try {
     await document.fonts.ready;
-    await bootstrap();
+    const video = await loadVideo(videoSlug);
+    await bootstrap(video);
   } catch (error) {
     console.error(error);
     window.__ready = Promise.reject(error);

@@ -1,32 +1,40 @@
 import { gsap } from 'gsap';
 import { el, zones, chip, maskLineHtml, fadeUp, maskReveal, codeCard, flagNote } from '../components.js';
+import { chipFromContent, escapeHtml, lineHtml } from './shared.js';
+
+// Kartu pseudo-code + anotasi baris + chip versi.
+// Content: eyebrow, headline[1 line], code{tag,lines[]}, note{text}, chips[].
+function codeLineHtml(line = {}) {
+  const text = escapeHtml(line.text);
+  if (line.tone === 'flag') return `<span class="flag-wrap">${text}</span>`;
+  if (line.tone) return `<span class="${escapeHtml(line.tone)}">${text}</span>`;
+  return text;
+}
 
 export function build(stage, tokens, ctx = {}) {
-  const dur = ctx.duration || 9;
   const b = ctx.beats;
+  const content = ctx.scene?.content || {};
   const root = el('div', 'scene');
   const z = zones(root);
 
-  z.eyebrow.append(chip('Celah 1', 'chip--danger'));
+  z.eyebrow.append(chipFromContent(content.eyebrow));
 
   const headline = el('h2', 'headline');
-  const line = maskLineHtml('use <span class="dim">cache</span>');
+  const line = maskLineHtml(lineHtml(content.headline?.[0]));
   headline.append(line);
   z.headline.append(headline);
 
-  const card = codeCard([
-    { html: 'async function getData() {' },
-    { html: '  <span class="accent">"use cache"</span>' },
-    { html: '<span class="flag-wrap">  return [bufA, bufB]</span>', wash: true },
-    { html: '}' },
-  ]);
+  const code = content.code || {};
+  const card = codeCard(
+    (code.lines || []).map((row) => ({ html: codeLineHtml(row), wash: Boolean(row.wash) })),
+    escapeHtml(code.tag)
+  );
 
-  const note = flagNote('lebih dari 1 typed array');
+  const note = flagNote(escapeHtml(content.note?.text));
 
   const chipRow = el('div', 'chip-row');
-  const c1 = chip('Next.js 16.0.0 – 16.4.0', '', 'chip--compact');
-  const c2 = chip('Cache Components: ON', '', 'chip--compact');
-  chipRow.append(c1, c2);
+  const chips = (content.chips || []).map((text) => chip(escapeHtml(text), '', 'chip--compact'));
+  chipRow.append(...chips);
 
   z.visual.append(card.root, note, chipRow);
 
@@ -61,8 +69,8 @@ export function build(stage, tokens, ctx = {}) {
   );
   fadeUp(tl, note, b.note, { y: 16, duration: 0.4 });
 
-  fadeUp(tl, c1, b.chipA, { y: 20, duration: 0.45 });
-  fadeUp(tl, c2, b.chipB, { y: 20, duration: 0.45 });
+  if (chips[0]) fadeUp(tl, chips[0], b.chipA, { y: 20, duration: 0.45 });
+  if (chips[1]) fadeUp(tl, chips[1], b.chipB, { y: 20, duration: 0.45 });
 
   return tl;
 }

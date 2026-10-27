@@ -2,17 +2,18 @@
 """Align scene timing to the voice-over audio (audio-based scene timing).
 
 Usage (from the project root):
-    python scripts/align.py                        # model small, CPU int8
+    python scripts/align.py                        # video nextjs-rce, model small
+    python scripts/align.py --video <slug>         # video lain di videos/<slug>/
     python scripts/align.py --model medium
     python scripts/align.py --verbose              # print the transcript
 
-Inputs:
-    assets/audio/voiceover.mp3
-    scenes.json
+Inputs (default, per video):
+    videos/<slug>/voiceover.mp3
+    videos/<slug>/scenes.json
 
-Outputs:
-    timing.json   { "<scene_id>": { "start": <sec>, "end": <sec> }, ... }
-    words.json    [ { "word": <str>, "start": <sec>, "end": <sec> }, ... ]
+Outputs (default, per video):
+    videos/<slug>/timing.json   { "<scene_id>": { "start": <sec>, "end": <sec> }, ... }
+    videos/<slug>/words.json    [ { "word": <str>, "start": <sec>, "end": <sec> }, ... ]
 
 How it works:
     1. Transcribe the audio with faster-whisper (language "id",
@@ -32,7 +33,8 @@ How it works:
        duration, >25% scale warnings).
 
 Missing scenes are reported loudly; with --allow-missing they fall back to
-scenes.json (never silent).
+scenes.json (never silent). Path flags (--audio, --scenes, --timing-out,
+--words-out) still override the per-video defaults.
 """
 
 from __future__ import annotations
@@ -47,10 +49,8 @@ from types import SimpleNamespace
 
 ROOT = Path(__file__).resolve().parent.parent
 
-DEFAULT_AUDIO = ROOT / "assets" / "audio" / "voiceover.mp3"
-DEFAULT_SCENES = ROOT / "scenes.json"
-DEFAULT_TIMING = ROOT / "timing.json"
-DEFAULT_WORDS = ROOT / "words.json"
+DEFAULT_VIDEO = "nextjs-rce"
+VIDEO_SLUG_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
 
 WORD_RE = re.compile(r"[^\W\d_]+", re.UNICODE)
 EDGE_PUNCT = "\"'“”‘’`´.,;:!?()[]{}<>«»…–—-"
@@ -307,13 +307,18 @@ def report(
 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(
-        description="Audio-based scene timing for scenes.json (faster-whisper)."
+        description="Audio-based scene timing for videos/<slug>/scenes.json (faster-whisper)."
+    )
+    parser.add_argument(
+        "--video",
+        default=DEFAULT_VIDEO,
+        help=f"slug video di videos/<slug>/ (default: {DEFAULT_VIDEO})",
     )
     parser.add_argument("--model", default="small", help="whisper model (default: small)")
-    parser.add_argument("--audio", type=Path, default=DEFAULT_AUDIO)
-    parser.add_argument("--scenes", type=Path, default=DEFAULT_SCENES)
-    parser.add_argument("--timing-out", type=Path, default=DEFAULT_TIMING)
-    parser.add_argument("--words-out", type=Path, default=DEFAULT_WORDS)
+    parser.add_argument("--audio", type=Path, default=None, help="override path audio")
+    parser.add_argument("--scenes", type=Path, default=None, help="override path scenes.json")
+    parser.add_argument("--timing-out", type=Path, default=None, help="override path timing.json")
+    parser.add_argument("--words-out", type=Path, default=None, help="override path words.json")
     parser.add_argument("--language", default="id")
     parser.add_argument("--device", default="cpu", help="cpu / cuda / auto")
     parser.add_argument("--compute-type", default="int8", help="int8 / float16 / float32")
@@ -335,9 +340,20 @@ def main(argv=None) -> int:
     parser.add_argument("--verbose", action="store_true", help="print transcript and matches")
     args = parser.parse_args(argv)
 
-    for path, label in ((args.audio, "audio"), (args.scenes, "scenes.json")):
+    if not VIDEO_SLUG_RE.match(args.video):
+        out(f"ERROR: slug video tidak valid: {args.video!r} (pakai huruf, angka, titik, - atau _)")
+        return 1
+
+    video_dir = ROOT / "videos" / args.video
+    audio_path = args.audio or video_dir / "voiceover.mp3"
+    scenes_path = args.scenes or video_dir / "scenes.json"
+    timing_path = args.timing_out or video_dir / "timing.json"
+    words_path = args.words_out or video_dir / "words.json"
+
+    for path, label in ((audio_path, "audio"), (scenes_path, "scenes.json")):
         if not path.exists():
             out(f"ERROR: {label} tidak ditemukan: {path}")
+            out(f"  Video '{args.video}' diharapkan ada di {video_dir}")
             return 1
 
     try:
@@ -348,7 +364,7 @@ def main(argv=None) -> int:
         out("  .venv\\Scripts\\python -m pip install -r scripts/requirements.txt")
         return 1
 
-    scenes_data = load_json(args.scenes)
+    scenes_data = load_json(scenes_path)
     scenes = scenes_data.get("scenes", [])
     if not scenes:
         out("ERROR: scenes.json tidak berisi scenes.")
@@ -359,10 +375,10 @@ def main(argv=None) -> int:
         for scene in scenes
     }
 
-    out(f"Transcribing {args.audio} ... (model={args.model}, device={args.device})")
+    out(f"Transcribing {audio_path} ... (model={args.model}, device={args.device})")
     model = WhisperModel(args.model, device=args.device, compute_type=args.compute_type)
     segments, info = model.transcribe(
-        str(args.audio),
+        str(audio_path),
         language=args.language,
         word_timestamps=True,
         beam_size=5,
@@ -464,8 +480,8 @@ def main(argv=None) -> int:
         window["start"] = round(window["start"], 3)
         window["end"] = round(window["end"], 3)
 
-    write_json(args.timing_out, timing)
-    write_json(args.words_out, whisper_words)
+    write_json(timing_path, timing)
+    write_json(words_path, whisper_words)
 
     warned = report(
         scenes,
@@ -487,8 +503,8 @@ def main(argv=None) -> int:
         out("Semua scene dalam batas +/-25% dari timing lama.")
 
     out("")
-    out(f"Ditulis: {args.timing_out}")
-    out(f"Ditulis: {args.words_out}")
+    out(f"Ditulis: {timing_path}")
+    out(f"Ditulis: {words_path}")
     return 0
 
 

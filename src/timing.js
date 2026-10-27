@@ -1,5 +1,9 @@
+// Beat animasi per template. `length` adalah durasi storyboard acuan; beat
+// diskalakan proporsional bila durasi scene di scenes.json berbeda.
+// Template `stack` punya dua peran: scene pertama (intro: layer, file, chip)
+// dan scene kedua (insight: layer aplikasi, badge, alur).
 const BASE = {
-  s01_hook: {
+  hook_server: {
     length: 6,
     eyebrow: 0,
     lineA: 0,
@@ -9,7 +13,7 @@ const BASE = {
     led: 3.7,
     ledSettle: 3.86,
   },
-  s02_rce: {
+  explain_flow: {
     length: 6,
     lineA: 0.05,
     lineB: 0.2,
@@ -26,7 +30,7 @@ const BASE = {
     cursor: 4.3,
     cursorEnd: 5.05,
   },
-  s03_patch: {
+  gauge: {
     length: 6,
     headline: 0,
     sub: 0.45,
@@ -34,7 +38,7 @@ const BASE = {
     badge: 2.6,
     footnote: 3.0,
   },
-  s04_flaw1_use_cache: {
+  codecard: {
     length: 9,
     headline: 0,
     card: 0.35,
@@ -45,7 +49,7 @@ const BASE = {
     chipA: 5.0,
     chipB: 5.12,
   },
-  s05_flaw2_librsvg: {
+  stack_intro: {
     length: 10,
     headlineA: 0,
     headlineB: 0.15,
@@ -60,7 +64,7 @@ const BASE = {
     flag: 4.6,
     chips: 6.5,
   },
-  s06_insight_dependency: {
+  stack_insight: {
     length: 7,
     headlineA: 0,
     headlineB: 0.15,
@@ -72,14 +76,14 @@ const BASE = {
     flowStep: 0.18,
     outline: 4.0,
   },
-  s07_fix: {
+  checklist: {
     length: 10,
     headline: 0,
     rows: 0.5,
     rowStep: 0.9,
     checkDelay: 0.4,
   },
-  s08_closing: {
+  closing: {
     length: 8,
     handle: 0,
     stackIn: 0.45,
@@ -92,8 +96,8 @@ const BASE = {
   },
 };
 
-export function beatsFor(sceneId, duration) {
-  const base = BASE[sceneId];
+export function beatsFor(beatsKey, duration) {
+  const base = BASE[beatsKey];
   if (!base) return { _duration: duration };
   const scale = duration > 0 ? duration / base.length : 1;
   const out = { _duration: duration, _scale: scale };

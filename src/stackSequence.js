@@ -2,18 +2,21 @@ import { gsap } from 'gsap';
 import { fadeUp } from './components.js';
 import { beatsFor } from './timing.js';
 
-export function buildStackSequence(stack, tokens, windows) {
+// Koreografi diagram stack persisten.
+// roles = { intro, insight, gap, closing }; tiap nilai { start, end, duration }
+// dari window scene terkait (gap = scene checklist, boleh null).
+export function buildStackSequence(stack, tokens, roles) {
   const tl = gsap.timeline();
   const libOutline = stack.lib.querySelector('.layer-outline rect');
   const appOutline = stack.app.querySelector('.layer-outline rect');
-  const base = windows.s05_flaw2_librsvg.start;
-  const local = (sceneId) => windows[sceneId].start - base;
-  const b5 = beatsFor('s05_flaw2_librsvg', windows.s05_flaw2_librsvg.duration);
-  const b6 = beatsFor('s06_insight_dependency', windows.s06_insight_dependency.duration);
-  const b8 = beatsFor('s08_closing', windows.s08_closing.duration);
-  const s6 = local('s06_insight_dependency');
-  const s7 = local('s07_fix');
-  const s8 = local('s08_closing');
+  const base = roles.intro.start;
+  const local = (role) => role.start - base;
+  const b5 = beatsFor('stack_intro', roles.intro.duration);
+  const b6 = beatsFor('stack_insight', roles.insight.duration);
+  const b8 = beatsFor('closing', roles.closing.duration);
+  const s6 = local(roles.insight);
+  const s7 = local(roles.gap || roles.closing);
+  const s8 = local(roles.closing);
 
   tl.set(stack.app, { opacity: 0 }, 0);
   tl.set(stack.appBadge, { opacity: 0 }, 0);

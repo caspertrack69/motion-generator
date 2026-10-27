@@ -1,25 +1,29 @@
 import { gsap } from 'gsap';
-import { el, zones, chip, maskLine, maskReveal, checklist } from '../components.js';
+import { el, zones, maskLine, maskReveal, checklist } from '../components.js';
+import { chipFromContent, escapeHtml } from './shared.js';
 
+// Baris checklist solusi (ikon centang / peringatan per baris).
+// Content: eyebrow, headline{text}, rows[] ({ main, small, status }).
 export function build(stage, tokens, ctx = {}) {
-  const dur = ctx.duration || 10;
   const b = ctx.beats;
+  const content = ctx.scene?.content || {};
   const root = el('div', 'scene');
   const z = zones(root);
 
-  z.eyebrow.append(chip('Solusi', 'chip--ok'));
+  z.eyebrow.append(chipFromContent(content.eyebrow));
 
   const headline = el('h2', 'headline headline--sm');
-  const line = maskLine('Cek versimu.');
+  const line = maskLine(content.headline?.text);
   headline.append(line);
   z.headline.append(headline);
 
-  const list = checklist([
-    { main: 'Next.js 16', small: '→ 16.4.1', status: 'ok' },
-    { main: 'Next.js 15', small: '→ 15.5.28', status: 'ok' },
-    { main: 'sharp ≥ 0.35.5', small: 'khusus celah SVG', status: 'ok' },
-    { main: 'Next.js ≤ 14', small: 'tidak ada patch, pindah ke 15', status: 'danger' },
-  ]);
+  const list = checklist(
+    (content.rows || []).map((row) => ({
+      main: escapeHtml(row.main),
+      small: escapeHtml(row.small),
+      status: row.status === 'danger' ? 'danger' : 'ok',
+    }))
+  );
 
   z.visual.append(list.root);
   stage.append(root);

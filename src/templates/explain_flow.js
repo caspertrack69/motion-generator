@@ -1,31 +1,40 @@
 import { gsap } from 'gsap';
 import { laptopIcon, serverIcon } from '../icons.js';
-import { el, zones, chip, maskLineHtml, fadeUp, maskReveal, terminalCard } from '../components.js';
+import { el, zones, maskLineHtml, fadeUp, maskReveal, terminalCard } from '../components.js';
+import { chipFromContent, escapeHtml } from './shared.js';
 
-const letter = (ch, cls) => `<span class="${cls}">${ch}</span>`;
-
+// Diagram alur: laptop (penyerang) -> server, plus kartu terminal ilustratif.
+// Content: eyebrow, headline[] ({ letter, rest }), nodes{left,right}, terminal.
 export function build(stage, tokens, ctx = {}) {
-  const dur = ctx.duration || 6;
   const b = ctx.beats;
+  const content = ctx.scene?.content || {};
   const root = el('div', 'scene');
   const z = zones(root);
 
-  z.eyebrow.append(chip('Security Brief · Next.js'));
+  z.eyebrow.append(chipFromContent(content.eyebrow));
 
   const headline = el('h2', 'headline headline--sm');
-  const lineA = maskLineHtml(`${letter('R', 'r-letter')}<span class="dim">emote</span>`);
-  const lineB = maskLineHtml(`${letter('C', 'c-letter')}<span class="dim">ode</span>`);
-  const lineC = maskLineHtml(`${letter('E', 'e-letter')}<span class="dim">xecution</span>`);
-  headline.append(lineA, lineB, lineC);
+  const lines = (content.headline || []).map((line) => {
+    const letterClass = `${String(line.letter || '').toLowerCase()}-letter`;
+    return maskLineHtml(
+      `<span class="${escapeHtml(letterClass)}">${escapeHtml(line.letter)}</span>` +
+        `<span class="dim">${escapeHtml(line.rest)}</span>`
+    );
+  });
+  headline.append(...lines);
   z.headline.append(headline);
 
   const visual = z.visual;
 
   const left = el('div', 'diagram-node node-laptop');
-  left.innerHTML = `${laptopIcon(220)}<span class="node-label">Penyerang</span>`;
+  left.innerHTML = `${laptopIcon(220)}<span class="node-label">${escapeHtml(
+    content.nodes?.left
+  )}</span>`;
 
   const right = el('div', 'diagram-node node-server');
-  right.innerHTML = `${serverIcon(220)}<span class="node-label">Server</span>`;
+  right.innerHTML = `${serverIcon(220)}<span class="node-label">${escapeHtml(
+    content.nodes?.right
+  )}</span>`;
 
   const connector = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   connector.setAttribute('class', 'connector');
@@ -36,21 +45,22 @@ export function build(stage, tokens, ctx = {}) {
 
   const packet = el('div', 'packet');
 
-  const terminal = terminalCard('perintah apa saja');
+  const terminal = terminalCard(escapeHtml(content.terminal?.text));
   visual.append(left, right, connector, packet, terminal.root);
 
   stage.append(root);
 
   const tl = gsap.timeline();
   fadeUp(tl, z.eyebrow.firstChild, 0, { y: 20, duration: 0.45 });
-  maskReveal(tl, lineA.firstChild, b.lineA, 0.5);
-  maskReveal(tl, lineB.firstChild, b.lineB, 0.5);
-  maskReveal(tl, lineC.firstChild, b.lineC, 0.5);
+  if (lines[0]) maskReveal(tl, lines[0].firstChild, b.lineA, 0.5);
+  if (lines[1]) maskReveal(tl, lines[1].firstChild, b.lineB, 0.5);
+  if (lines[2]) maskReveal(tl, lines[2].firstChild, b.lineC, 0.5);
 
-  const letters = ['.r-letter', '.c-letter', '.e-letter'];
-  letters.forEach((sel, i) => {
+  const letters = lines.map((line) => line.querySelector('.mask-inner')?.firstElementChild);
+  letters.forEach((letterEl, i) => {
+    if (!letterEl) return;
     tl.fromTo(
-      root.querySelector(sel),
+      letterEl,
       { color: tokens.dim },
       { color: tokens.accent, duration: 0.15, ease: 'power2.out' },
       b.letters + i * 0.15

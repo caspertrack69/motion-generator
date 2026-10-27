@@ -6,11 +6,29 @@ import path from 'node:path';
 import ffmpeg from 'ffmpeg-static';
 
 const root = process.cwd();
+const cliArgs = process.argv.slice(2);
+
+function argValue(name, fallback = null) {
+  const index = cliArgs.indexOf(`--${name}`);
+  if (index < 0) return fallback;
+  const value = cliArgs[index + 1];
+  return value && !value.startsWith('--') ? value : fallback;
+}
+
+const DEFAULT_VIDEO = 'nextjs-rce';
+const videoSlug = argValue('video', DEFAULT_VIDEO);
+if (!/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(videoSlug)) {
+  console.error(`Slug --video tidak valid: ${videoSlug}`);
+  process.exit(1);
+}
+
+const videoDir = path.join(root, 'videos', videoSlug);
 const framesDir = path.join(root, 'frames');
 const outDir = path.join(root, 'out');
-const audioPath = path.join(root, 'assets', 'audio', 'voiceover.mp3');
-const outputPath = path.join(outDir, 'nextjs-rce.mp4');
-const silent = process.argv.includes('--silent');
+const scenesPath = path.join(videoDir, 'scenes.json');
+const audioPath = path.join(videoDir, 'voiceover.mp3');
+const outputPath = path.join(outDir, `${videoSlug}.mp4`);
+const silent = cliArgs.includes('--silent');
 
 const FPS = 30;
 const WIDTH = 1080;
@@ -39,6 +57,10 @@ async function runFfmpeg(args) {
 }
 
 async function main() {
+  if (!(await pathExists(scenesPath))) {
+    throw new Error(`Video "${videoSlug}" tidak ditemukan: ${scenesPath}`);
+  }
+
   await fs.rm(framesDir, { recursive: true, force: true });
   await fs.mkdir(framesDir, { recursive: true });
   await fs.mkdir(outDir, { recursive: true });
@@ -52,7 +74,7 @@ async function main() {
     logLevel: 'warn',
   });
   const base = server.resolvedUrls?.local?.[0] || 'http://127.0.0.1:4173/';
-  const url = new URL('?render=1', base).href;
+  const url = new URL(`?render=1&video=${encodeURIComponent(videoSlug)}`, base).href;
 
   const browser = await chromium.launch();
   const context = await browser.newContext({

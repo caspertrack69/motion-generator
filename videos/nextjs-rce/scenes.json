@@ -13,9 +13,17 @@
     },
     "note": "Timing awal berdasarkan estimasi 2,7 kata/detik. Sesuaikan dengan durasi audio TTS final."
   },
+  "stack": {
+    "app": "Aplikasimu",
+    "badge": "rapi",
+    "layers": ["Next.js", "sharp", "librsvg"],
+    "file": "logo.svg",
+    "chips": ["Linux glibc", "Next.js 10 – 16"]
+  },
   "scenes": [
     {
       "id": "s01_hook",
+      "template": "hook_server",
       "time": { "start": 0, "end": 6 },
       "title": "Hook: Dua celah, nol login",
       "role": "hook",
@@ -27,6 +35,13 @@
         "di servermu. Tanpa login."
       ],
       "subtitle_highlight": { "words": ["Tanpa login"], "color": "danger" },
+      "content": {
+        "eyebrow": { "text": "Security Brief · Next.js" },
+        "headline": [
+          { "text": "DUA CELAH." },
+          { "text": "NOL LOGIN.", "tone": "danger" }
+        ]
+      },
       "visual": "Latar gelap dengan radial gradient halus. Chip seri di zona eyebrow. Headline 2 baris di zona headline: 'DUA CELAH.' (warna text) lalu 'NOL LOGIN.' (warna danger). Di zona visual: ikon server rack flat (stroke text-dim, ±360px) di tengah, dengan gembok kecil di sisi kanan atas server. LED status server awalnya abu-abu.",
       "on_screen_text": ["SECURITY BRIEF · NEXT.JS", "DUA CELAH.", "NOL LOGIN."],
       "gsap_notes": [
@@ -41,6 +56,7 @@
     },
     {
       "id": "s02_rce",
+      "template": "explain_flow",
       "time": { "start": 6, "end": 12 },
       "title": "Apa itu RCE",
       "role": "explain",
@@ -53,6 +69,16 @@
         "dari jarak jauh."
       ],
       "subtitle_highlight": { "words": ["RCE", "perintah apa saja"], "color": "accent" },
+      "content": {
+        "eyebrow": { "text": "Security Brief · Next.js" },
+        "headline": [
+          { "letter": "R", "rest": "emote" },
+          { "letter": "C", "rest": "ode" },
+          { "letter": "E", "rest": "xecution" }
+        ],
+        "nodes": { "left": "Penyerang", "right": "Server" },
+        "terminal": { "text": "perintah apa saja" }
+      },
       "visual": "Headline 3 baris (88px): 'Remote / Code / Execution'. Huruf R, C, E berwarna accent, huruf lain text-dim. Zona visual: diagram horizontal 3 elemen: ikon laptop berlabel 'PENYERANG' (kiri), garis putus-putus, ikon server berlabel 'SERVER' (kanan). Di atas server muncul kartu terminal kecil dengan teks generik '> perintah apa saja_' dan kursor berkedip. Tidak ada perintah nyata.",
       "on_screen_text": ["Remote", "Code", "Execution", "PENYERANG", "SERVER", "> perintah apa saja_"],
       "gsap_notes": [
@@ -67,6 +93,7 @@
     },
     {
       "id": "s03_patch",
+      "template": "gauge",
       "time": { "start": 12, "end": 18 },
       "title": "Patch darurat 14 Oktober, skor 9,5",
       "role": "explain",
@@ -78,6 +105,14 @@
         "keduanya diberi skor 9,5 dari 10."
       ],
       "subtitle_highlight": { "words": ["9,5", "kritis"], "color": "danger" },
+      "content": {
+        "eyebrow": { "text": "14 Okt 2026", "variant": "danger" },
+        "headline": { "text": "PATCH DARURAT.", "sub": "(out-of-band)" },
+        "gauges": [{ "label": "Celah 1" }, { "label": "Celah 2" }],
+        "score": { "value": 9.5, "max": 10 },
+        "badge": { "text": "Kritis" },
+        "footnote": { "text": "Skor CVSS versi Vercel" }
+      },
       "visual": "Chip tanggal '14 OKT 2026' di zona eyebrow, headline 'PATCH DARURAT' dengan sub-label mono '(out-of-band)'. Zona visual: dua gauge setengah lingkaran berdampingan (±400px), berlabel 'CELAH 1' dan 'CELAH 2'. Busur terisi hingga 9.5/10 warna danger, angka besar 9.5 di tengah menghitung naik dari 0.0. Di bawah gauge: badge 'KRITIS' dengan ikon peringatan. Footnote kecil: 'Skor CVSS versi Vercel'.",
       "on_screen_text": ["14 OKT 2026", "PATCH DARURAT", "(out-of-band)", "CELAH 1", "CELAH 2", "9.5", "KRITIS", "Skor CVSS versi Vercel"],
       "gsap_notes": [
@@ -91,6 +126,7 @@
     },
     {
       "id": "s04_flaw1_use_cache",
+      "template": "codecard",
       "time": { "start": 18, "end": 27 },
       "title": "Celah 1: use cache dan typed array",
       "role": "insight",
@@ -104,6 +140,23 @@
         "mengaktifkan Cache Components."
       ],
       "subtitle_highlight": { "words": ["use cache", "typed array"], "color": "danger" },
+      "content": {
+        "eyebrow": { "text": "Celah 1", "variant": "danger" },
+        "headline": [
+          { "segments": [{ "text": "use " }, { "text": "cache", "tone": "dim" }] }
+        ],
+        "code": {
+          "tag": "ilustrasi",
+          "lines": [
+            { "text": "async function getData() {" },
+            { "text": "  \"use cache\"", "tone": "accent" },
+            { "text": "  return [bufA, bufB]", "tone": "flag", "wash": true },
+            { "text": "}" }
+          ]
+        },
+        "note": { "text": "lebih dari 1 typed array" },
+        "chips": ["Next.js 16.0.0 – 16.4.0", "Cache Components: ON"]
+      },
       "visual": "Chip 'CELAH 1' (danger). Headline: 'use cache'. Zona visual: kartu kode (ilustrasi) berisi pseudo-code 4 baris: 'async function getData() {' / '  \"use cache\"' / '  return [bufA, bufB]' / '}'. Baris 'return [bufA, bufB]' ditandai danger dengan label kecil 'lebih dari 1 typed array'. Di bawah kartu: dua chip berdampingan: 'Next.js 16.0.0 – 16.4.0' dan 'Cache Components: ON'. Label kecil di pojok kartu: 'ilustrasi'.",
       "on_screen_text": ["CELAH 1", "use cache", "return [bufA, bufB]", "lebih dari 1 typed array", "Next.js 16.0.0 – 16.4.0", "Cache Components: ON", "ilustrasi"],
       "gsap_notes": [
@@ -116,6 +169,7 @@
     },
     {
       "id": "s05_flaw2_librsvg",
+      "template": "stack",
       "time": { "start": 27, "end": 37 },
       "title": "Celah 2: librsvg lewat sharp",
       "role": "insight",
@@ -130,6 +184,10 @@
         "Versi 10 sampai 16 terdampak."
       ],
       "subtitle_highlight": { "words": ["librsvg", "glibc"], "color": "danger" },
+      "content": {
+        "eyebrow": { "text": "Celah 2", "variant": "danger" },
+        "headline": [{ "text": "Image" }, { "text": "Optimization." }]
+      },
       "visual": "Chip 'CELAH 2' (danger). Headline: 'Image Optimization'. Zona visual: stack 3 layer vertikal (760x100, gap 16): 'Next.js' (atas), 'sharp' (tengah), 'librsvg' (bawah). Ikon file 'logo.svg' muncul di atas stack lalu turun menembus layer ke librsvg. Saat sampai, layer librsvg berubah ke danger dengan ikon peringatan. Di bawah stack: dua chip 'Linux glibc' dan 'Next.js 10 – 16'.",
       "on_screen_text": ["CELAH 2", "Image Optimization", "Next.js", "sharp", "librsvg", "logo.svg", "Linux glibc", "Next.js 10 – 16"],
       "gsap_notes": [
@@ -143,6 +201,7 @@
     },
     {
       "id": "s06_insight_dependency",
+      "template": "stack",
       "time": { "start": 37, "end": 44 },
       "title": "Insight: celahnya di lapisan bawah",
       "role": "insight",
@@ -155,6 +214,13 @@
         "tapi tetap ikut terdampak."
       ],
       "subtitle_highlight": { "words": ["bukan di kode Next.js", "terdampak"], "color": "danger" },
+      "content": {
+        "eyebrow": { "text": "Celah 2", "variant": "danger" },
+        "headline": [
+          { "text": "Bukan di kode" },
+          { "segments": [{ "text": "Next.js.", "tone": "danger" }] }
+        ]
+      },
       "visual": "Headline: 'Bukan di kode Next.js.' Stack dari s05 tetap ada; layer baru 'Aplikasimu' masuk dari atas dengan badge centang 'rapi' (warna accent, bukan ok). Seluruh stack bergeser ke bawah 56px untuk memberi ruang. Dari layer librsvg (danger) mengalir 3 garis pendek merah ke atas melewati sharp dan Next.js sampai ke 'Aplikasimu', yang outline-nya ikut berubah danger.",
       "on_screen_text": ["Bukan di kode Next.js.", "Aplikasimu", "rapi", "Next.js", "sharp", "librsvg"],
       "gsap_notes": [
@@ -168,6 +234,7 @@
     },
     {
       "id": "s07_fix",
+      "template": "checklist",
       "time": { "start": 44, "end": 54 },
       "title": "Solusi: versi yang aman",
       "role": "action",
@@ -182,6 +249,16 @@
         "jadi pindah ke 15."
       ],
       "subtitle_highlight": { "words": ["16.4.1", "15.5.28", "0.35.5"], "color": "ok" },
+      "content": {
+        "eyebrow": { "text": "Solusi", "variant": "ok" },
+        "headline": { "text": "Cek versimu." },
+        "rows": [
+          { "main": "Next.js 16", "small": "→ 16.4.1", "status": "ok" },
+          { "main": "Next.js 15", "small": "→ 15.5.28", "status": "ok" },
+          { "main": "sharp ≥ 0.35.5", "small": "khusus celah SVG", "status": "ok" },
+          { "main": "Next.js ≤ 14", "small": "tidak ada patch, pindah ke 15", "status": "danger" }
+        ]
+      },
       "visual": "Chip 'SOLUSI' (ok). Headline: 'Cek versimu.' Zona visual: 4 baris checklist (kartu 760x120): (1) 'Next.js 16 → 16.4.1' ikon centang ok, (2) 'Next.js 15 → 15.5.28' centang ok, (3) 'sharp ≥ 0.35.5 (khusus celah SVG)' centang ok, (4) 'Next.js ≤ 14 → tidak ada patch, pindah ke 15' ikon peringatan danger. Stack diagram dari scene sebelumnya keluar sebelum checklist masuk.",
       "on_screen_text": ["SOLUSI", "Cek versimu.", "Next.js 16 → 16.4.1", "Next.js 15 → 15.5.28", "sharp ≥ 0.35.5 (khusus celah SVG)", "Next.js ≤ 14 → tidak ada patch, pindah ke 15"],
       "gsap_notes": [
@@ -194,6 +271,7 @@
     },
     {
       "id": "s08_closing",
+      "template": "closing",
       "time": { "start": 54, "end": 62 },
       "title": "Kesimpulan: tumpukan dependency",
       "role": "conclusion",
@@ -207,6 +285,15 @@
         "apa yang ada di bawah appmu?"
       ],
       "subtitle_highlight": { "words": ["lapisan terbawah", "bawah appmu"], "color": "accent" },
+      "content": {
+        "eyebrow": { "text": "Security Brief · Next.js" },
+        "headline": [
+          { "text": "Kapan terakhir" },
+          { "text": "kamu cek yang ada" },
+          { "segments": [{ "text": "di " }, { "text": "bawah appmu?", "tone": "accent" }] }
+        ],
+        "handle": { "text": "@caspertrack69" }
+      },
       "visual": "Checklist keluar. Stack 4 layer (Aplikasimu, Next.js, sharp, librsvg) muncul kembali dengan warna netral (text-dim), lalu layer paling bawah mendapat tanda tanya accent berukuran besar. Headline kalimat penutup 2-3 baris: 'Kapan terakhir kamu cek yang ada di bawah appmu?'. Di akhir, semua elemen memudar pelan menyisakan handle '@caspertrack69' kecil di zona eyebrow.",
       "on_screen_text": ["Aplikasimu", "Next.js", "sharp", "librsvg", "?", "Kapan terakhir kamu cek yang ada di bawah appmu?", "@caspertrack69"],
       "gsap_notes": [

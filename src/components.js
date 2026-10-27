@@ -1,5 +1,12 @@
 import { warningIcon, checkIcon, fileIcon } from './icons.js';
 
+function escapeText(text) {
+  return String(text ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
 export function el(tag, className, html = '') {
   const node = document.createElement(tag);
   if (className) node.className = className;
@@ -38,11 +45,11 @@ export function card(className = '') {
   return el('div', `card ${className}`.trim());
 }
 
-export function codeCard(lines) {
+export function codeCard(lines, tagText = 'ilustrasi') {
   const wrap = el('div', 'code-card');
   const head = el('div', 'code-head');
   const dots = el('div', 'code-dots', '<i></i><i></i><i></i>');
-  const tag = el('span', 'code-tag', 'ilustrasi');
+  const tag = el('span', 'code-tag', tagText);
   head.append(dots, tag);
   wrap.append(head);
   const lineEls = lines.map((line) => {
@@ -94,7 +101,11 @@ export function terminalCard(text) {
   return { root: cardEl, cursor: body.querySelector('.cursor'), body };
 }
 
-export function createStack() {
+// Diagram stack persisten (s05–s08). Label layer, badge, nama file, dan chip
+// berasal dari blok `stack` di videos/<slug>/scenes.json.
+export function createStack(content = {}) {
+  const layerLabels = Array.isArray(content.layers) ? content.layers : [];
+  const chipLabels = Array.isArray(content.chips) ? content.chips : [];
   const viewport = el('div', 'stack-viewport');
 
   const flow = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -114,29 +125,41 @@ export function createStack() {
   `;
 
   const stack = el('div', 'stack');
-  const app = el('div', 'stack-layer stack-layer--app', `${outlineSvg}<span>Aplikasimu</span>`);
-  const appBadge = el('span', 'layer-badge', `${checkIcon(40)}<span>rapi</span>`);
+  const app = el(
+    'div',
+    'stack-layer stack-layer--app',
+    `${outlineSvg}<span>${escapeText(content.app)}</span>`
+  );
+  const appBadge = el(
+    'span',
+    'layer-badge',
+    `${checkIcon(40)}<span>${escapeText(content.badge)}</span>`
+  );
   app.append(appBadge);
 
   const make = (name) => {
-    const layer = el('div', 'stack-layer', `${outlineSvg}<span>${name}</span>`);
+    const layer = el('div', 'stack-layer', `${outlineSvg}<span>${escapeText(name)}</span>`);
     return layer;
   };
 
-  const next = make('Next.js');
-  const sharp = make('sharp');
-  const lib = make('librsvg');
+  const next = make(layerLabels[0]);
+  const sharp = make(layerLabels[1]);
+  const lib = make(layerLabels[2]);
   const libFlag = el('span', 'layer-flag layer-flag--danger', warningIcon(48));
   const libQ = el('span', 'layer-q', `<svg viewBox="0 0 120 160" fill="none" stroke="currentColor" stroke-width="12" stroke-linecap="round" aria-hidden="true"><path d="M30 48a30 30 0 1 1 48 24c-12 8-18 16-18 30"/><circle cx="60" cy="132" r="5" fill="currentColor" stroke="none"/></svg>`);
   lib.append(libFlag, libQ);
 
   stack.append(app, next, sharp, lib);
 
-  const file = el('div', 'stack-file', `${fileIcon(76)}<span class="file-label">logo.svg</span>`);
+  const file = el(
+    'div',
+    'stack-file',
+    `${fileIcon(76)}<span class="file-label">${escapeText(content.file)}</span>`
+  );
 
   const chips = el('div', 'stack-chips');
-  const chipA = chip('Linux glibc', '', 'chip--compact');
-  const chipB = chip('Next.js 10 – 16', '', 'chip--compact');
+  const chipA = chip(escapeText(chipLabels[0]), '', 'chip--compact');
+  const chipB = chip(escapeText(chipLabels[1]), '', 'chip--compact');
   chips.append(chipA, chipB);
 
   viewport.append(flow, stack, file, chips);
