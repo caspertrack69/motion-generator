@@ -43,6 +43,7 @@ import re
 import sys
 import unicodedata
 from pathlib import Path
+from types import SimpleNamespace
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -159,8 +160,14 @@ def match_query(
     first_threshold: float,
     match_threshold: float,
     max_gap: int,
+    max_word_gap: int,
 ):
     """Find `query` in `tokens` forward from `start_index` (monotonic, fuzzy).
+
+    Gaps are only allowed through non-content tokens (numbers, versions,
+    acronyms) or at most `max_word_gap` ordinary words, so a word from a
+    previous sentence cannot be used to reach the next scene and silently
+    truncate the scene before it.
 
     Returns the list of matched token indices, or None.
     """
@@ -176,17 +183,19 @@ def match_query(
         for target in query[1:]:
             limit = min(len(tokens), cursor + max_gap + 1)
             best_index = -1
-            best_score = 0.0
+            skipped_words = 0
             for k in range(cursor, limit):
                 candidate = tokens[k]
                 if not candidate.matchable:
                     continue
                 score = ratio(target, candidate.text)
-                if score >= match_threshold and score > best_score:
-                    best_index = k
-                    best_score = score
-                    if score >= 0.999:
-                        break
+                if score >= match_threshold:
+                    if skipped_words <= max_word_gap:
+                        best_index = k
+                    break
+                skipped_words += 1
+                if skipped_words > max_word_gap:
+                    break
             if best_index < 0:
                 complete = False
                 break
@@ -204,6 +213,7 @@ def match_scene(
     first_threshold: float,
     match_threshold: float,
     max_gap: int,
+    max_word_gap: int,
     min_words: int,
 ):
     """Longest prefix (3-5 ordinary words) of `narration` found in `tokens`."""
@@ -219,6 +229,7 @@ def match_scene(
             first_threshold,
             match_threshold,
             max_gap,
+            max_word_gap,
         )
         if matched:
             return matched, words[:length]
@@ -249,8 +260,7 @@ def report(
     matched,
     queries,
     model_name,
-    output_warnings,
-) -> int:
+) -> list:
     video_duration = timing[scenes[-1]["id"]]["end"]
     old_total = old_windows[scenes[-1]["id"]]["end"]
 
@@ -292,7 +302,7 @@ def report(
         if scene_id in matched:
             out(f"match {scene_id:<24} [{matched[scene_id][0]:7.3f}]  '{' '.join(words_used)}'")
 
-    return warned, output_warnings
+    return warned
 
 
 def main(argv=None) -> int:
@@ -312,6 +322,12 @@ def main(argv=None) -> int:
     parser.add_argument("--match-threshold", type=float, default=0.70)
     parser.add_argument("--max-gap", type=int, default=12, help="max skipped transcript tokens")
     parser.add_argument(
+        "--max-word-gap",
+        type=int,
+        default=2,
+        help="max skipped ordinary words inside a scene prefix (numbers/acronyms are free)",
+    )
+    parser.add_argument(
         "--allow-missing",
         action="store_true",
         help="fall back to scenes.json for unmatched scenes (explicit warning)",
@@ -328,7 +344,8 @@ def main(argv=None) -> int:
         from faster_whisper import WhisperModel
     except ImportError:
         out("ERROR: faster-whisper belum terpasang.")
-        out("  pip install faster-whisper")
+        out("  python -m venv .venv")
+        out("  .venv\\Scripts\\python -m pip install -r scripts/requirements.txt")
         return 1
 
     scenes_data = load_json(args.scenes)
@@ -351,7 +368,6 @@ def main(argv=None) -> int:
         beam_size=5,
     )
     whisper_words = []
-    transcript_words = []
     for segment in segments:
         for word in segment.words or []:
             if word.word is None:
@@ -359,7 +375,6 @@ def main(argv=None) -> int:
             whisper_words.append(
                 {"word": word.word.strip(), "start": round(float(word.start), 3), "end": round(float(word.end), 3)}
             )
-            transcript_words.append(word.word.strip())
     audio_duration = float(getattr(info, "duration", 0.0) or 0.0)
     if audio_duration <= 0 and whisper_words:
         audio_duration = float(whisper_words[-1]["end"])
@@ -368,7 +383,7 @@ def main(argv=None) -> int:
         return 1
 
     tokens = transcript_tokens(
-        [type("W", (), {"word": w["word"], "start": w["start"], "end": w["end"]}) for w in whisper_words]
+        [SimpleNamespace(word=w["word"], start=w["start"], end=w["end"]) for w in whisper_words]
     )
 
     if args.verbose:
@@ -380,7 +395,6 @@ def main(argv=None) -> int:
 
     timing = {}
     matched = {}
-    matched_lengths = {}
     queries = {}
     missing = []
     cursor = 0
@@ -396,6 +410,7 @@ def main(argv=None) -> int:
             args.first_threshold,
             args.match_threshold,
             args.max_gap,
+            args.max_word_gap,
             args.min_words,
         )
         queries[scene_id] = used
@@ -414,7 +429,6 @@ def main(argv=None) -> int:
             continue
         previous_start = start
         matched[scene_id] = (first.start, used)
-        matched_lengths[scene_id] = len(indices)
         timing[scene_id] = {"start": round(start, 3), "end": None}
         cursor = indices[-1] + 1
 
@@ -453,7 +467,7 @@ def main(argv=None) -> int:
     write_json(args.timing_out, timing)
     write_json(args.words_out, whisper_words)
 
-    warned, _ = report(
+    warned = report(
         scenes,
         timing,
         whisper_words,
@@ -462,7 +476,6 @@ def main(argv=None) -> int:
         matched,
         queries,
         args.model,
-        [],
     )
 
     out("")
