@@ -29,11 +29,19 @@ Menghasilkan `out/nextjs-rce.mp4` (H.264, 1080×1920, 30 fps). Frame PNG sementa
 
 ## Mengganti audio
 
-Letakkan file voice over final di `assets/audio/voiceover.mp3`, lalu jalankan `npm run render`. Tanpa file tersebut, video tetap dirender tanpa audio.
+Letakkan file voice over final di `assets/audio/voiceover.mp3`, lalu sinkronkan timing scene ke audio:
+
+```bash
+python -m venv .venv
+.venv\Scripts\python -m pip install -r scripts/requirements.txt
+.venv\Scripts\python scripts\align.py
+```
+
+`align.py` mentranskrip audio (faster-whisper, language `id`, word timestamps), mencocokkan 3-5 kata pembuka tiap scene, lalu menulis `timing.json` (start/end per scene) dan `words.json` (timestamp per kata). Gunakan `--model medium` untuk akurasi lebih tinggi. Setelah itu jalankan `npm run render`. Tanpa file audio, video tetap dirender tanpa audio.
 
 ## Mengubah timing
 
-Semua waktu scene berasal dari `scenes.json`. Untuk menyesuaikan dengan durasi audio tanpa mengubah data utama, isi `timing.override.json`:
+Prioritas timing: `timing.override.json` → `timing.json` → `scenes.json`. `timing.json` hasil `align.py` otomatis dipakai bila ada; nilai di dalamnya menimpa `scenes.json`. Untuk koreksi manual kecil tanpa mengubah hasil align, isi `timing.override.json`:
 
 ```json
 {
@@ -44,7 +52,7 @@ Semua waktu scene berasal dari `scenes.json`. Untuk menyesuaikan dengan durasi a
 }
 ```
 
-Hanya `start`/`end` yang diberikan akan dioverride; scene lain memakai nilai dari `scenes.json`. Durasi total mengikuti `end` scene terakhir. Beat animasi di dalam scene diskalakan otomatis lewat `src/timing.js`.
+Hanya `start`/`end` yang diberikan akan dioverride; scene lain memakai nilai dari `scenes.json`/`timing.json`. Durasi total mengikuti `end` scene terakhir. Beat animasi di dalam scene diskalakan lewat `src/timing.js`, lalu seluruh timeline scene diskalakan ke durasi audio (`sceneTl.duration()` di `src/main.js`).
 
 ## Struktur
 
@@ -54,17 +62,21 @@ src/
   main.js            bootstrap, master timeline, kontrak seek
   tokens.css         token warna
   styles.css         layout & komponen
-  subtitles.js       engine subtitle proporsional per karakter
+  subtitles.js       engine subtitle (word timing dari words.json, fallback proporsional)
   icons.js           ikon SVG
   components.js      kartu, chip, gauge, code card, stack, checklist
   timing.js          beat per scene + override
   stackSequence.js   koreografi stack persisten s05–s08
   scenes/            s01–s08
 scripts/
+  align.py           faster-whisper: timing.json + words.json dari voiceover
+  requirements.txt   dependensi Python untuk align.py
   render.mjs         pipeline Vite preview + Playwright + FFmpeg
   qa.mjs             cek layout, font, subtitle, determinisme
   qa-state.mjs       cek visibilitas scene/stack di batas waktu
 assets/audio/        voiceover.mp3 (opsional)
+timing.json          start/end scene hasil align.py (opsional)
+words.json           timestamp per kata hasil align.py (opsional)
 ```
 
 ## Kontrak timeline
