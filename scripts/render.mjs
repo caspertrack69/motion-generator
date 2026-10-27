@@ -115,7 +115,10 @@ async function main() {
     '-preset',
     'slow'
   );
-  if (hasAudio) args.push('-c:a', 'aac', '-b:a', '192k', '-shortest');
+  // Video length is exactly ceil(window.__duration * FPS) frames, where
+  // window.__duration = end of the last scene (audio end + 0.8 s). Do not use
+  // -shortest here: it can truncate the voice over at the video boundary.
+  if (hasAudio) args.push('-c:a', 'aac', '-b:a', '192k');
   args.push(outputPath);
 
   console.log(hasAudio ? 'Encoding with audio...' : 'Encoding silent...');
