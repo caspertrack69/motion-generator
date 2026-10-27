@@ -42,6 +42,18 @@ const overrideModules = import.meta.glob('../timing.override.json', {
 });
 const overrides = overrideModules['../timing.override.json'] || {};
 
+const audioTimingModules = import.meta.glob('../timing.json', {
+  eager: true,
+  import: 'default',
+});
+const audioTiming = audioTimingModules['../timing.json'] || {};
+
+const wordsModules = import.meta.glob('../words.json', {
+  eager: true,
+  import: 'default',
+});
+const audioWords = wordsModules['../words.json'] || null;
+
 const params = new URLSearchParams(window.location.search);
 const isRender = params.get('render') === '1';
 const isDev = params.get('dev') === '1';
@@ -56,13 +68,30 @@ const timecode = document.getElementById('timecode');
 gsap.ticker.lagSmoothing(0);
 gsap.defaults({ ease: 'power3.out', duration: 0.55 });
 
-function applyOverrides(data) {
+function applyTiming(data) {
   const overridesById = overrides.scenes || overrides;
   return data.scenes.map((scene) => {
     const patch = overridesById[scene.id] || {};
-    const start = Number.isFinite(patch.start) ? patch.start : scene.time.start;
-    const end = Number.isFinite(patch.end) ? patch.end : scene.time.end;
-    return { ...scene, time: { start, end } };
+    const audio = audioTiming[scene.id] || {};
+    const baseStart = scene.time.start;
+    const baseEnd = scene.time.end;
+    const start = Number.isFinite(patch.start)
+      ? patch.start
+      : Number.isFinite(audio.start)
+        ? audio.start
+        : baseStart;
+    const end = Number.isFinite(patch.end)
+      ? patch.end
+      : Number.isFinite(audio.end)
+        ? audio.end
+        : baseEnd;
+    const audioTimed = Number.isFinite(audio.start) && Number.isFinite(audio.end);
+    return {
+      ...scene,
+      time: { start, end },
+      designDuration: Math.max(0.001, baseEnd - baseStart),
+      audioTimed,
+    };
   });
 }
 
@@ -104,7 +133,7 @@ async function bootstrap() {
   scenesEl.className = 'scenes';
   stage.append(bg, scenesEl);
 
-  const scenes = applyOverrides(scenesData);
+  const scenes = applyTiming(scenesData);
   const totalDuration = scenes[scenes.length - 1].time.end;
   const windows = sceneWindows(scenes);
 
@@ -126,9 +155,12 @@ async function bootstrap() {
     const builder = BUILDERS[scene.id];
     if (!builder) return;
     const duration = scene.time.end - scene.time.start;
-    const beats = beatsFor(scene.id, duration);
-    const tl = builder(scenesEl, TOKENS, {
-      duration,
+    // Build at the designed length, then rescale the whole scene timeline to
+    // the audio-derived length so internal choreography follows the voice over.
+    const buildDuration = scene.audioTimed ? scene.designDuration : duration;
+    const beats = beatsFor(scene.id, buildDuration);
+    const sceneTl = builder(scenesEl, TOKENS, {
+      duration: buildDuration,
       stack,
       scene,
       tokens: TOKENS,
@@ -139,19 +171,34 @@ async function bootstrap() {
     if (root) {
       root.style.display = 'none';
       sceneClips.push({ root, start: scene.time.start, end: scene.time.end });
-      if (scene.id !== 's08_closing') {
-        tl.fromTo(
-          root,
-          { opacity: 1, y: 0 },
-          { opacity: 0, y: -24, duration: 0.3, ease: 'power2.in', immediateRender: false },
-          Math.max(0, duration - 0.32)
-        );
-      }
     }
-    master.add(tl, scene.time.start);
+    const scale = buildDuration > 0 ? duration / buildDuration : 1;
+    if (scene.audioTimed) {
+      // Pad to the designed end first, otherwise GSAP would scale by
+      // newDuration / lastTweenEnd and stretch short intro timelines wildly.
+      sceneTl.set({}, {}, buildDuration);
+    }
+    if (root && scene.id !== 's08_closing') {
+      sceneTl.fromTo(
+        root,
+        { opacity: 1, y: 0 },
+        {
+          opacity: 0,
+          y: -24,
+          duration: 0.3 / scale,
+          ease: 'power2.in',
+          immediateRender: false,
+        },
+        Math.max(0, buildDuration - 0.32 / scale)
+      );
+    }
+    if (scene.audioTimed) {
+      sceneTl.duration(duration);
+    }
+    master.add(sceneTl, scene.time.start);
   });
 
-  const subtitles = buildSubtitles(master, scenes);
+  const subtitles = buildSubtitles(master, scenes, audioWords);
   stage.append(subtitles);
 
   const stackWindow = { start: 27, end: 62 };
