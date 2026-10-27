@@ -1,0 +1,10 @@
+# Dependencies for scripts/align.py (audio-based scene timing).
+#
+# Install into a virtual environment:
+#   python -m venv .venv
+#   .venv\Scripts\python -m pip install -r scripts/requirements.txt
+#
+# av is pinned: faster-whisper 1.2.1 calls av.open(metadata_errors=...), which
+# PyAV 17+ removed. Remove the pin only after faster-whisper supports it.
+faster-whisper==1.2.1
+av==16.1.0
