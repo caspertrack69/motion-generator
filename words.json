@@ -1,0 +1,907 @@
+[
+  {
+    "word": "Kalau",
+    "start": 0.0,
+    "end": 0.26
+  },
+  {
+    "word": "kamu",
+    "start": 0.26,
+    "end": 0.58
+  },
+  {
+    "word": "pakai",
+    "start": 0.58,
+    "end": 0.84
+  },
+  {
+    "word": "Next",
+    "start": 0.84,
+    "end": 1.16
+  },
+  {
+    "word": ".js,",
+    "start": 1.16,
+    "end": 1.84
+  },
+  {
+    "word": "dua",
+    "start": 2.16,
+    "end": 2.36
+  },
+  {
+    "word": "celah",
+    "start": 2.36,
+    "end": 2.7
+  },
+  {
+    "word": "ini",
+    "start": 2.7,
+    "end": 2.88
+  },
+  {
+    "word": "bisa",
+    "start": 2.88,
+    "end": 3.16
+  },
+  {
+    "word": "membuat",
+    "start": 3.16,
+    "end": 3.56
+  },
+  {
+    "word": "orang",
+    "start": 3.56,
+    "end": 3.78
+  },
+  {
+    "word": "asing",
+    "start": 3.78,
+    "end": 4.16
+  },
+  {
+    "word": "menjalankan",
+    "start": 4.16,
+    "end": 4.76
+  },
+  {
+    "word": "kode",
+    "start": 4.76,
+    "end": 5.1
+  },
+  {
+    "word": "di",
+    "start": 5.1,
+    "end": 5.32
+  },
+  {
+    "word": "servermu",
+    "start": 5.32,
+    "end": 5.88
+  },
+  {
+    "word": "tanpa",
+    "start": 5.88,
+    "end": 6.52
+  },
+  {
+    "word": "login,",
+    "start": 6.52,
+    "end": 6.9
+  },
+  {
+    "word": "namanya",
+    "start": 7.22,
+    "end": 8.18
+  },
+  {
+    "word": "RCE,",
+    "start": 8.18,
+    "end": 8.98
+  },
+  {
+    "word": "Remote",
+    "start": 9.44,
+    "end": 9.64
+  },
+  {
+    "word": "Code",
+    "start": 9.64,
+    "end": 10.02
+  },
+  {
+    "word": "Execution.",
+    "start": 10.02,
+    "end": 10.82
+  },
+  {
+    "word": "Penyerang",
+    "start": 11.22,
+    "end": 11.7
+  },
+  {
+    "word": "bisa",
+    "start": 11.7,
+    "end": 12.0
+  },
+  {
+    "word": "menjuruh",
+    "start": 12.0,
+    "end": 12.44
+  },
+  {
+    "word": "server",
+    "start": 12.44,
+    "end": 12.7
+  },
+  {
+    "word": "menjalankan",
+    "start": 12.7,
+    "end": 13.44
+  },
+  {
+    "word": "perintah",
+    "start": 13.44,
+    "end": 13.9
+  },
+  {
+    "word": "apa",
+    "start": 13.9,
+    "end": 14.08
+  },
+  {
+    "word": "saja,",
+    "start": 14.08,
+    "end": 14.46
+  },
+  {
+    "word": "dari",
+    "start": 14.6,
+    "end": 14.94
+  },
+  {
+    "word": "jarak",
+    "start": 14.94,
+    "end": 15.3
+  },
+  {
+    "word": "jauh.",
+    "start": 15.3,
+    "end": 15.88
+  },
+  {
+    "word": "Tanggal",
+    "start": 16.24,
+    "end": 16.58
+  },
+  {
+    "word": "14",
+    "start": 16.58,
+    "end": 17.0
+  },
+  {
+    "word": "Oktober,",
+    "start": 17.0,
+    "end": 17.82
+  },
+  {
+    "word": "Versel",
+    "start": 18.16,
+    "end": 18.6
+  },
+  {
+    "word": "merilis",
+    "start": 18.6,
+    "end": 19.24
+  },
+  {
+    "word": "patch",
+    "start": 19.24,
+    "end": 19.56
+  },
+  {
+    "word": "darurat.",
+    "start": 19.56,
+    "end": 20.28
+  },
+  {
+    "word": "Dua",
+    "start": 20.7,
+    "end": 20.92
+  },
+  {
+    "word": "celah",
+    "start": 20.92,
+    "end": 21.24
+  },
+  {
+    "word": "kritis,",
+    "start": 21.24,
+    "end": 21.74
+  },
+  {
+    "word": "keduanya",
+    "start": 21.86,
+    "end": 22.14
+  },
+  {
+    "word": "diberi",
+    "start": 22.14,
+    "end": 22.6
+  },
+  {
+    "word": "score",
+    "start": 22.6,
+    "end": 22.82
+  },
+  {
+    "word": "9",
+    "start": 22.82,
+    "end": 23.28
+  },
+  {
+    "word": ",5",
+    "start": 23.28,
+    "end": 24.12
+  },
+  {
+    "word": "dari",
+    "start": 24.12,
+    "end": 24.46
+  },
+  {
+    "word": "10.",
+    "start": 24.46,
+    "end": 24.84
+  },
+  {
+    "word": "Celah",
+    "start": 25.3,
+    "end": 25.86
+  },
+  {
+    "word": "pertama",
+    "start": 25.86,
+    "end": 26.24
+  },
+  {
+    "word": "ada",
+    "start": 26.24,
+    "end": 26.58
+  },
+  {
+    "word": "di",
+    "start": 26.58,
+    "end": 26.8
+  },
+  {
+    "word": "Use",
+    "start": 26.8,
+    "end": 27.04
+  },
+  {
+    "word": "Cache.",
+    "start": 27.04,
+    "end": 27.46
+  },
+  {
+    "word": "Jika",
+    "start": 27.46,
+    "end": 28.14
+  },
+  {
+    "word": "fungsi",
+    "start": 28.14,
+    "end": 28.52
+  },
+  {
+    "word": "cache",
+    "start": 28.52,
+    "end": 28.74
+  },
+  {
+    "word": "mengembalikan",
+    "start": 28.74,
+    "end": 29.46
+  },
+  {
+    "word": "lebih",
+    "start": 29.46,
+    "end": 29.74
+  },
+  {
+    "word": "dari",
+    "start": 29.74,
+    "end": 30.0
+  },
+  {
+    "word": "satu",
+    "start": 30.0,
+    "end": 30.42
+  },
+  {
+    "word": "type",
+    "start": 30.42,
+    "end": 30.7
+  },
+  {
+    "word": "array,",
+    "start": 30.7,
+    "end": 31.14
+  },
+  {
+    "word": "pintu",
+    "start": 31.54,
+    "end": 32.0
+  },
+  {
+    "word": "terbuka,",
+    "start": 32.0,
+    "end": 32.48
+  },
+  {
+    "word": "terdampak.",
+    "start": 32.88,
+    "end": 33.58
+  },
+  {
+    "word": "Next",
+    "start": 33.98,
+    "end": 34.2
+  },
+  {
+    "word": ".js",
+    "start": 34.2,
+    "end": 34.66
+  },
+  {
+    "word": "16",
+    "start": 34.66,
+    "end": 35.54
+  },
+  {
+    "word": "yang",
+    "start": 35.54,
+    "end": 36.2
+  },
+  {
+    "word": "mengaktifkan",
+    "start": 36.2,
+    "end": 36.98
+  },
+  {
+    "word": "cache",
+    "start": 36.98,
+    "end": 37.36
+  },
+  {
+    "word": "components.",
+    "start": 37.36,
+    "end": 37.94
+  },
+  {
+    "word": "Celah",
+    "start": 38.56,
+    "end": 38.92
+  },
+  {
+    "word": "kedua",
+    "start": 38.92,
+    "end": 39.24
+  },
+  {
+    "word": "lebih",
+    "start": 39.24,
+    "end": 39.48
+  },
+  {
+    "word": "luas.",
+    "start": 39.48,
+    "end": 39.98
+  },
+  {
+    "word": "Ada",
+    "start": 40.24,
+    "end": 40.48
+  },
+  {
+    "word": "bug",
+    "start": 40.48,
+    "end": 40.8
+  },
+  {
+    "word": "memory",
+    "start": 40.8,
+    "end": 41.22
+  },
+  {
+    "word": "di",
+    "start": 41.22,
+    "end": 41.46
+  },
+  {
+    "word": "lib",
+    "start": 41.46,
+    "end": 41.66
+  },
+  {
+    "word": "RSVG,",
+    "start": 41.66,
+    "end": 42.78
+  },
+  {
+    "word": "pustaka",
+    "start": 43.12,
+    "end": 43.6
+  },
+  {
+    "word": "SVG",
+    "start": 43.6,
+    "end": 44.6
+  },
+  {
+    "word": "yang",
+    "start": 44.6,
+    "end": 44.84
+  },
+  {
+    "word": "dipakai",
+    "start": 44.84,
+    "end": 45.28
+  },
+  {
+    "word": "lewat",
+    "start": 45.28,
+    "end": 45.54
+  },
+  {
+    "word": "sharp,",
+    "start": 45.54,
+    "end": 45.92
+  },
+  {
+    "word": "kena",
+    "start": 46.18,
+    "end": 46.58
+  },
+  {
+    "word": "di",
+    "start": 46.58,
+    "end": 46.78
+  },
+  {
+    "word": "Image",
+    "start": 46.78,
+    "end": 47.2
+  },
+  {
+    "word": "Optimization,",
+    "start": 47.2,
+    "end": 48.04
+  },
+  {
+    "word": "pada",
+    "start": 48.38,
+    "end": 48.72
+  },
+  {
+    "word": "Linux",
+    "start": 48.72,
+    "end": 49.04
+  },
+  {
+    "word": "berbasis",
+    "start": 49.04,
+    "end": 50.02
+  },
+  {
+    "word": "glipsy,",
+    "start": 50.02,
+    "end": 51.24
+  },
+  {
+    "word": "versi",
+    "start": 51.48,
+    "end": 51.96
+  },
+  {
+    "word": "10",
+    "start": 51.96,
+    "end": 52.34
+  },
+  {
+    "word": "sampai",
+    "start": 52.34,
+    "end": 52.72
+  },
+  {
+    "word": "16",
+    "start": 52.72,
+    "end": 53.4
+  },
+  {
+    "word": "terdampak.",
+    "start": 53.4,
+    "end": 54.54
+  },
+  {
+    "word": "Celah",
+    "start": 54.54,
+    "end": 55.46
+  },
+  {
+    "word": "ini",
+    "start": 55.46,
+    "end": 55.62
+  },
+  {
+    "word": "bahkan",
+    "start": 55.62,
+    "end": 56.02
+  },
+  {
+    "word": "bukan",
+    "start": 56.02,
+    "end": 56.22
+  },
+  {
+    "word": "di",
+    "start": 56.22,
+    "end": 56.44
+  },
+  {
+    "word": "kode",
+    "start": 56.44,
+    "end": 56.68
+  },
+  {
+    "word": "Next",
+    "start": 56.68,
+    "end": 57.0
+  },
+  {
+    "word": ".js,",
+    "start": 57.0,
+    "end": 57.7
+  },
+  {
+    "word": "tapi",
+    "start": 58.06,
+    "end": 58.34
+  },
+  {
+    "word": "di",
+    "start": 58.34,
+    "end": 58.52
+  },
+  {
+    "word": "pustaka",
+    "start": 58.52,
+    "end": 59.04
+  },
+  {
+    "word": "di",
+    "start": 59.04,
+    "end": 59.28
+  },
+  {
+    "word": "bawahnya.",
+    "start": 59.28,
+    "end": 59.76
+  },
+  {
+    "word": "Kodemu",
+    "start": 60.0,
+    "end": 60.46
+  },
+  {
+    "word": "bisa",
+    "start": 60.46,
+    "end": 60.76
+  },
+  {
+    "word": "rapi,",
+    "start": 60.76,
+    "end": 61.24
+  },
+  {
+    "word": "tapi",
+    "start": 61.62,
+    "end": 61.88
+  },
+  {
+    "word": "tetap",
+    "start": 61.88,
+    "end": 62.2
+  },
+  {
+    "word": "ikut",
+    "start": 62.2,
+    "end": 62.46
+  },
+  {
+    "word": "terdampak.",
+    "start": 62.46,
+    "end": 63.08
+  },
+  {
+    "word": "Solusinya,",
+    "start": 63.54,
+    "end": 64.26
+  },
+  {
+    "word": "update",
+    "start": 64.6,
+    "end": 64.98
+  },
+  {
+    "word": "ke",
+    "start": 64.98,
+    "end": 65.24
+  },
+  {
+    "word": "16",
+    "start": 65.24,
+    "end": 65.94
+  },
+  {
+    "word": ".4",
+    "start": 65.94,
+    "end": 66.84
+  },
+  {
+    "word": ".1",
+    "start": 66.84,
+    "end": 67.78
+  },
+  {
+    "word": "atau",
+    "start": 67.78,
+    "end": 68.5
+  },
+  {
+    "word": "15",
+    "start": 68.5,
+    "end": 69.0
+  },
+  {
+    "word": ".5",
+    "start": 69.0,
+    "end": 69.72
+  },
+  {
+    "word": ".28.",
+    "start": 69.72,
+    "end": 70.84
+  },
+  {
+    "word": "Belum",
+    "start": 71.54,
+    "end": 71.82
+  },
+  {
+    "word": "bisa",
+    "start": 71.82,
+    "end": 72.0
+  },
+  {
+    "word": "upgrade.",
+    "start": 72.0,
+    "end": 72.42
+  },
+  {
+    "word": "Untuk",
+    "start": 72.78,
+    "end": 73.12
+  },
+  {
+    "word": "Celah",
+    "start": 73.12,
+    "end": 73.42
+  },
+  {
+    "word": "SVG,",
+    "start": 73.42,
+    "end": 74.06
+  },
+  {
+    "word": "pastikan",
+    "start": 74.38,
+    "end": 74.82
+  },
+  {
+    "word": "sharp",
+    "start": 74.82,
+    "end": 75.36
+  },
+  {
+    "word": "minimal",
+    "start": 75.36,
+    "end": 75.68
+  },
+  {
+    "word": "0",
+    "start": 75.68,
+    "end": 76.16
+  },
+  {
+    "word": ".35",
+    "start": 76.16,
+    "end": 77.18
+  },
+  {
+    "word": ".5.",
+    "start": 77.18,
+    "end": 78.3
+  },
+  {
+    "word": "Pakai",
+    "start": 78.66,
+    "end": 78.94
+  },
+  {
+    "word": "Next",
+    "start": 78.94,
+    "end": 79.18
+  },
+  {
+    "word": ".js",
+    "start": 79.18,
+    "end": 79.64
+  },
+  {
+    "word": "14",
+    "start": 79.64,
+    "end": 80.12
+  },
+  {
+    "word": "ke",
+    "start": 80.12,
+    "end": 80.54
+  },
+  {
+    "word": "bawah,",
+    "start": 80.54,
+    "end": 81.02
+  },
+  {
+    "word": "tidak",
+    "start": 81.24,
+    "end": 81.46
+  },
+  {
+    "word": "ada",
+    "start": 81.46,
+    "end": 81.74
+  },
+  {
+    "word": "patch,",
+    "start": 81.74,
+    "end": 82.1
+  },
+  {
+    "word": "jadi",
+    "start": 82.46,
+    "end": 82.62
+  },
+  {
+    "word": "pindah",
+    "start": 82.62,
+    "end": 83.0
+  },
+  {
+    "word": "ke",
+    "start": 83.0,
+    "end": 83.1
+  },
+  {
+    "word": "15.",
+    "start": 83.1,
+    "end": 83.4
+  },
+  {
+    "word": "Pelajarannya.",
+    "start": 84.54,
+    "end": 85.22
+  },
+  {
+    "word": "Aplikasi",
+    "start": 85.7,
+    "end": 86.36
+  },
+  {
+    "word": "modern",
+    "start": 86.36,
+    "end": 86.62
+  },
+  {
+    "word": "itu",
+    "start": 86.62,
+    "end": 87.06
+  },
+  {
+    "word": "tumpukan",
+    "start": 87.06,
+    "end": 87.58
+  },
+  {
+    "word": "dependensi.",
+    "start": 87.58,
+    "end": 88.42
+  },
+  {
+    "word": "Keamananmu",
+    "start": 88.74,
+    "end": 89.36
+  },
+  {
+    "word": "hanya",
+    "start": 89.36,
+    "end": 89.56
+  },
+  {
+    "word": "sekuat",
+    "start": 89.56,
+    "end": 89.98
+  },
+  {
+    "word": "lapisan",
+    "start": 89.98,
+    "end": 90.44
+  },
+  {
+    "word": "terbawah.",
+    "start": 90.44,
+    "end": 91.18
+  },
+  {
+    "word": "Kapan",
+    "start": 91.62,
+    "end": 92.02
+  },
+  {
+    "word": "terakhir",
+    "start": 92.02,
+    "end": 92.48
+  },
+  {
+    "word": "kamu",
+    "start": 92.48,
+    "end": 92.72
+  },
+  {
+    "word": "cek",
+    "start": 92.72,
+    "end": 93.0
+  },
+  {
+    "word": "apa",
+    "start": 93.0,
+    "end": 93.24
+  },
+  {
+    "word": "yang",
+    "start": 93.24,
+    "end": 93.44
+  },
+  {
+    "word": "ada",
+    "start": 93.44,
+    "end": 93.68
+  },
+  {
+    "word": "di",
+    "start": 93.68,
+    "end": 93.84
+  },
+  {
+    "word": "bawah",
+    "start": 93.84,
+    "end": 94.26
+  },
+  {
+    "word": "EPIMU?",
+    "start": 94.26,
+    "end": 94.98
+  }
+]

@@ -1,0 +1,34 @@
+{
+  "s01_hook": {
+    "start": 0.0,
+    "end": 7.07
+  },
+  "s02_rce": {
+    "start": 7.07,
+    "end": 16.09
+  },
+  "s03_patch": {
+    "start": 16.09,
+    "end": 25.15
+  },
+  "s04_flaw1_use_cache": {
+    "start": 25.15,
+    "end": 38.41
+  },
+  "s05_flaw2_librsvg": {
+    "start": 38.41,
+    "end": 54.39
+  },
+  "s06_insight_dependency": {
+    "start": 54.39,
+    "end": 63.39
+  },
+  "s07_fix": {
+    "start": 63.39,
+    "end": 84.39
+  },
+  "s08_closing": {
+    "start": 84.39,
+    "end": 96.095
+  }
+}
