@@ -207,8 +207,8 @@
         "apa yang ada di bawah appmu?"
       ],
       "subtitle_highlight": { "words": ["lapisan terbawah", "bawah appmu"], "color": "accent" },
-      "visual": "Checklist keluar. Stack 4 layer (Aplikasimu, Next.js, sharp, librsvg) muncul kembali dengan warna netral (text-dim), lalu layer paling bawah mendapat tanda tanya accent berukuran besar. Headline kalimat penutup 2-3 baris: 'Kapan terakhir kamu cek yang ada di bawah appmu?'. Di akhir, semua elemen memudar pelan menyisakan handle '@namakamu' kecil di zona eyebrow.",
-      "on_screen_text": ["Aplikasimu", "Next.js", "sharp", "librsvg", "?", "Kapan terakhir kamu cek yang ada di bawah appmu?", "@namakamu"],
+      "visual": "Checklist keluar. Stack 4 layer (Aplikasimu, Next.js, sharp, librsvg) muncul kembali dengan warna netral (text-dim), lalu layer paling bawah mendapat tanda tanya accent berukuran besar. Headline kalimat penutup 2-3 baris: 'Kapan terakhir kamu cek yang ada di bawah appmu?'. Di akhir, semua elemen memudar pelan menyisakan handle '@caspertrack69' kecil di zona eyebrow.",
+      "on_screen_text": ["Aplikasimu", "Next.js", "sharp", "librsvg", "?", "Kapan terakhir kamu cek yang ada di bawah appmu?", "@caspertrack69"],
       "gsap_notes": [
         "Checklist keluar 0.3s; stack kembali dengan warna netral (tween stroke ke text-dim)",
         "t=2.0: tanda tanya accent scale 0.9->1 + fade pada layer bawah (tanpa overshoot)",
