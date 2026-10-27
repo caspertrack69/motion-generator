@@ -1,0 +1,821 @@
+{
+  "report": {
+    "s01": {
+      "issues": [],
+      "boxes": [
+        {
+          "cls": "chip",
+          "text": "Security Brief · Next.js",
+          "top": 240,
+          "bottom": 302,
+          "left": 72,
+          "right": 720
+        },
+        {
+          "cls": "mask-inner",
+          "text": "DUA CELAH.",
+          "top": 340,
+          "bottom": 441,
+          "left": 72,
+          "right": 960
+        },
+        {
+          "cls": "mask-inner",
+          "text": "NOL LOGIN.",
+          "top": 441,
+          "bottom": 542,
+          "left": 72,
+          "right": 960
+        },
+        {
+          "cls": "sub-pill",
+          "text": "orang asing menjalankan kode",
+          "top": 1290,
+          "bottom": 1464,
+          "left": 120,
+          "right": 960
+        }
+      ]
+    },
+    "s02": {
+      "issues": [],
+      "boxes": [
+        {
+          "cls": "chip",
+          "text": "Security Brief · Next.js",
+          "top": 240,
+          "bottom": 302,
+          "left": 72,
+          "right": 720
+        },
+        {
+          "cls": "r-letter",
+          "text": "R",
+          "top": 333,
+          "bottom": 439,
+          "left": 72,
+          "right": 128
+        },
+        {
+          "cls": "dim",
+          "text": "emote",
+          "top": 333,
+          "bottom": 439,
+          "left": 128,
+          "right": 393
+        },
+        {
+          "cls": "c-letter",
+          "text": "C",
+          "top": 425,
+          "bottom": 531,
+          "left": 72,
+          "right": 136
+        },
+        {
+          "cls": "dim",
+          "text": "ode",
+          "top": 425,
+          "bottom": 531,
+          "left": 136,
+          "right": 294
+        },
+        {
+          "cls": "e-letter",
+          "text": "E",
+          "top": 518,
+          "bottom": 624,
+          "left": 72,
+          "right": 124
+        },
+        {
+          "cls": "dim",
+          "text": "xecution",
+          "top": 518,
+          "bottom": 624,
+          "left": 124,
+          "right": 491
+        },
+        {
+          "cls": "node-label",
+          "text": "Penyerang",
+          "top": 1110,
+          "bottom": 1155,
+          "left": 72,
+          "right": 312
+        },
+        {
+          "cls": "node-label",
+          "text": "Server",
+          "top": 1110,
+          "bottom": 1155,
+          "left": 720,
+          "right": 960
+        },
+        {
+          "cls": "terminal-card",
+          "text": "> perintah apa saja",
+          "top": 668,
+          "bottom": 808,
+          "left": 400,
+          "right": 960
+        },
+        {
+          "cls": "terminal-body",
+          "text": "> perintah apa saja",
+          "top": 714,
+          "bottom": 806,
+          "left": 402,
+          "right": 958
+        },
+        {
+          "cls": "dim",
+          "text": ">",
+          "top": 731,
+          "bottom": 784,
+          "left": 424,
+          "right": 448
+        },
+        {
+          "cls": "sub-pill",
+          "text": "menjalankan perintah apa saja,",
+          "top": 1290,
+          "bottom": 1464,
+          "left": 120,
+          "right": 960
+        },
+        {
+          "cls": "hl-accent",
+          "text": "perintah apa saja",
+          "top": 1313,
+          "bottom": 1441,
+          "left": 480,
+          "right": 868
+        }
+      ]
+    },
+    "s03": {
+      "issues": [],
+      "boxes": [
+        {
+          "cls": "chip",
+          "text": "14 Okt 2026",
+          "top": 240,
+          "bottom": 302,
+          "left": 72,
+          "right": 401
+        },
+        {
+          "cls": "mask-inner",
+          "text": "PATCH DARURAT.",
+          "top": 340,
+          "bottom": 432,
+          "left": 72,
+          "right": 960
+        },
+        {
+          "cls": "headline-sub",
+          "text": "(out-of-band)",
+          "top": 452,
+          "bottom": 488,
+          "left": 72,
+          "right": 960
+        },
+        {
+          "cls": "gauge-label",
+          "text": "Celah 1",
+          "top": 664,
+          "bottom": 709,
+          "left": 104,
+          "right": 504
+        },
+        {
+          "cls": "gauge-num",
+          "text": "9.5",
+          "top": 756,
+          "bottom": 888,
+          "left": 104,
+          "right": 504
+        },
+        {
+          "cls": "gauge-label",
+          "text": "Celah 2",
+          "top": 664,
+          "bottom": 709,
+          "left": 528,
+          "right": 928
+        },
+        {
+          "cls": "gauge-num",
+          "text": "9.5",
+          "top": 756,
+          "bottom": 888,
+          "left": 528,
+          "right": 928
+        },
+        {
+          "cls": "span",
+          "text": "Kritis",
+          "top": 1004,
+          "bottom": 1044,
+          "left": 465,
+          "right": 637
+        },
+        {
+          "cls": "footnote",
+          "text": "Skor CVSS versi Vercel",
+          "top": 1098,
+          "bottom": 1143,
+          "left": 72,
+          "right": 960
+        },
+        {
+          "cls": "sub-pill",
+          "text": "keduanya diberi skor 9,5 dari ",
+          "top": 1290,
+          "bottom": 1464,
+          "left": 120,
+          "right": 960
+        },
+        {
+          "cls": "hl-danger",
+          "text": "9,5",
+          "top": 1313,
+          "bottom": 1376,
+          "left": 715,
+          "right": 796
+        }
+      ]
+    },
+    "s04": {
+      "issues": [],
+      "boxes": [
+        {
+          "cls": "chip",
+          "text": "Celah 1",
+          "top": 240,
+          "bottom": 302,
+          "left": 72,
+          "right": 303
+        },
+        {
+          "cls": "mask-inner",
+          "text": "use cache",
+          "top": 340,
+          "bottom": 441,
+          "left": 72,
+          "right": 960
+        },
+        {
+          "cls": "dim",
+          "text": "cache",
+          "top": 332,
+          "bottom": 448,
+          "left": 259,
+          "right": 540
+        },
+        {
+          "cls": "code-card",
+          "text": "ilustrasiasync function getDat",
+          "top": 670,
+          "bottom": 1037,
+          "left": 136,
+          "right": 896
+        },
+        {
+          "cls": "code-tag",
+          "text": "ilustrasi",
+          "top": 698,
+          "bottom": 743,
+          "left": 646,
+          "right": 854
+        },
+        {
+          "cls": "span",
+          "text": "async function getData() {",
+          "top": 761,
+          "bottom": 814,
+          "left": 188,
+          "right": 812
+        },
+        {
+          "cls": "accent",
+          "text": "\"use cache\"",
+          "top": 822,
+          "bottom": 875,
+          "left": 236,
+          "right": 500
+        },
+        {
+          "cls": "flag-wrap",
+          "text": "return [bufA, bufB]",
+          "top": 883,
+          "bottom": 936,
+          "left": 188,
+          "right": 692
+        },
+        {
+          "cls": "span",
+          "text": "}",
+          "top": 943,
+          "bottom": 996,
+          "left": 188,
+          "right": 212
+        },
+        {
+          "cls": "span",
+          "text": "lebih dari 1 typed array",
+          "top": 1046,
+          "bottom": 1091,
+          "left": 188,
+          "right": 710
+        },
+        {
+          "cls": "chip",
+          "text": "Next.js 16.0.0 – 16.4.0",
+          "top": 1096,
+          "bottom": 1154,
+          "left": 212,
+          "right": 820
+        },
+        {
+          "cls": "chip",
+          "text": "Cache Components: ON",
+          "top": 1166,
+          "bottom": 1224,
+          "left": 249,
+          "right": 783
+        },
+        {
+          "cls": "sub-pill",
+          "text": "Terdampak: Next.js 16 yang",
+          "top": 1290,
+          "bottom": 1399,
+          "left": 155,
+          "right": 925
+        }
+      ]
+    },
+    "s05": {
+      "issues": [],
+      "boxes": [
+        {
+          "cls": "chip",
+          "text": "Celah 2",
+          "top": 240,
+          "bottom": 302,
+          "left": 72,
+          "right": 303
+        },
+        {
+          "cls": "mask-inner",
+          "text": "Image",
+          "top": 340,
+          "bottom": 432,
+          "left": 72,
+          "right": 960
+        },
+        {
+          "cls": "mask-inner",
+          "text": "Optimization.",
+          "top": 432,
+          "bottom": 525,
+          "left": 72,
+          "right": 960
+        },
+        {
+          "cls": "stack-layer",
+          "text": "Next.js",
+          "top": 720,
+          "bottom": 820,
+          "left": 160,
+          "right": 920
+        },
+        {
+          "cls": "span",
+          "text": "Next.js",
+          "top": 748,
+          "bottom": 793,
+          "left": 459,
+          "right": 621
+        },
+        {
+          "cls": "stack-layer",
+          "text": "sharp",
+          "top": 836,
+          "bottom": 936,
+          "left": 160,
+          "right": 920
+        },
+        {
+          "cls": "span",
+          "text": "sharp",
+          "top": 864,
+          "bottom": 909,
+          "left": 482,
+          "right": 598
+        },
+        {
+          "cls": "stack-layer",
+          "text": "librsvg",
+          "top": 952,
+          "bottom": 1052,
+          "left": 160,
+          "right": 920
+        },
+        {
+          "cls": "span",
+          "text": "librsvg",
+          "top": 980,
+          "bottom": 1025,
+          "left": 459,
+          "right": 621
+        },
+        {
+          "cls": "chip",
+          "text": "Linux glibc",
+          "top": 1180,
+          "bottom": 1238,
+          "left": 170,
+          "right": 483
+        },
+        {
+          "cls": "chip",
+          "text": "Next.js 10 – 16",
+          "top": 1180,
+          "bottom": 1238,
+          "left": 499,
+          "right": 910
+        },
+        {
+          "cls": "sub-pill",
+          "text": "pada Linux berbasis glibc.",
+          "top": 1290,
+          "bottom": 1399,
+          "left": 173,
+          "right": 907
+        },
+        {
+          "cls": "hl-danger",
+          "text": "glibc",
+          "top": 1313,
+          "bottom": 1376,
+          "left": 731,
+          "right": 855
+        }
+      ]
+    },
+    "s06": {
+      "issues": [],
+      "boxes": [
+        {
+          "cls": "chip",
+          "text": "Celah 2",
+          "top": 240,
+          "bottom": 302,
+          "left": 72,
+          "right": 303
+        },
+        {
+          "cls": "mask-inner",
+          "text": "Bukan di kode",
+          "top": 340,
+          "bottom": 432,
+          "left": 72,
+          "right": 960
+        },
+        {
+          "cls": "danger",
+          "text": "Next.js.",
+          "top": 425,
+          "bottom": 531,
+          "left": 72,
+          "right": 401
+        },
+        {
+          "cls": "stack-layer",
+          "text": "Aplikasimu rapi",
+          "top": 660,
+          "bottom": 760,
+          "left": 160,
+          "right": 920
+        },
+        {
+          "cls": "span",
+          "text": "Aplikasimu",
+          "top": 688,
+          "bottom": 733,
+          "left": 424,
+          "right": 656
+        },
+        {
+          "cls": "span",
+          "text": "rapi",
+          "top": 688,
+          "bottom": 733,
+          "left": 802,
+          "right": 894
+        },
+        {
+          "cls": "stack-layer",
+          "text": "Next.js",
+          "top": 776,
+          "bottom": 876,
+          "left": 160,
+          "right": 920
+        },
+        {
+          "cls": "span",
+          "text": "Next.js",
+          "top": 804,
+          "bottom": 849,
+          "left": 459,
+          "right": 621
+        },
+        {
+          "cls": "stack-layer",
+          "text": "sharp",
+          "top": 892,
+          "bottom": 992,
+          "left": 160,
+          "right": 920
+        },
+        {
+          "cls": "span",
+          "text": "sharp",
+          "top": 920,
+          "bottom": 965,
+          "left": 482,
+          "right": 598
+        },
+        {
+          "cls": "stack-layer",
+          "text": "librsvg",
+          "top": 1008,
+          "bottom": 1108,
+          "left": 160,
+          "right": 920
+        },
+        {
+          "cls": "span",
+          "text": "librsvg",
+          "top": 1036,
+          "bottom": 1081,
+          "left": 459,
+          "right": 621
+        },
+        {
+          "cls": "sub-pill",
+          "text": "Kodemu bisa rapi,",
+          "top": 1290,
+          "bottom": 1399,
+          "left": 278,
+          "right": 802
+        }
+      ]
+    },
+    "s07": {
+      "issues": [],
+      "boxes": [
+        {
+          "cls": "chip",
+          "text": "Solusi",
+          "top": 240,
+          "bottom": 302,
+          "left": 72,
+          "right": 279
+        },
+        {
+          "cls": "mask-inner",
+          "text": "Cek versimu.",
+          "top": 340,
+          "bottom": 432,
+          "left": 72,
+          "right": 960
+        },
+        {
+          "cls": "check-row",
+          "text": "Next.js 16→ 16.4.1",
+          "top": 676,
+          "bottom": 796,
+          "left": 136,
+          "right": 896
+        },
+        {
+          "cls": "check-text",
+          "text": "Next.js 16→ 16.4.1",
+          "top": 691,
+          "bottom": 781,
+          "left": 236,
+          "right": 434
+        },
+        {
+          "cls": "small",
+          "text": "→ 16.4.1",
+          "top": 743,
+          "bottom": 781,
+          "left": 236,
+          "right": 434
+        },
+        {
+          "cls": "check-row",
+          "text": "Next.js 15→ 15.5.28",
+          "top": 808,
+          "bottom": 928,
+          "left": 136,
+          "right": 896
+        },
+        {
+          "cls": "check-text",
+          "text": "Next.js 15→ 15.5.28",
+          "top": 823,
+          "bottom": 913,
+          "left": 236,
+          "right": 433
+        },
+        {
+          "cls": "small",
+          "text": "→ 15.5.28",
+          "top": 875,
+          "bottom": 913,
+          "left": 236,
+          "right": 433
+        },
+        {
+          "cls": "check-row",
+          "text": "sharp ≥ 0.35.5khusus celah SVG",
+          "top": 940,
+          "bottom": 1060,
+          "left": 136,
+          "right": 896
+        },
+        {
+          "cls": "check-text",
+          "text": "sharp ≥ 0.35.5khusus celah SVG",
+          "top": 955,
+          "bottom": 1045,
+          "left": 236,
+          "right": 573
+        },
+        {
+          "cls": "small",
+          "text": "khusus celah SVG",
+          "top": 1007,
+          "bottom": 1045,
+          "left": 236,
+          "right": 573
+        },
+        {
+          "cls": "check-row",
+          "text": "Next.js ≤ 14tidak ada patch, p",
+          "top": 1072,
+          "bottom": 1192,
+          "left": 136,
+          "right": 896
+        },
+        {
+          "cls": "check-text",
+          "text": "Next.js ≤ 14tidak ada patch, p",
+          "top": 1087,
+          "bottom": 1177,
+          "left": 236,
+          "right": 847
+        },
+        {
+          "cls": "small",
+          "text": "tidak ada patch, pindah ke 15",
+          "top": 1139,
+          "bottom": 1177,
+          "left": 236,
+          "right": 847
+        },
+        {
+          "cls": "sub-pill",
+          "text": "Pakai Next.js 14 ke bawah?",
+          "top": 1290,
+          "bottom": 1399,
+          "left": 164,
+          "right": 916
+        }
+      ]
+    },
+    "s08": {
+      "issues": [],
+      "boxes": [
+        {
+          "cls": "chip",
+          "text": "Security Brief · Next.js",
+          "top": 240,
+          "bottom": 302,
+          "left": 72,
+          "right": 720
+        },
+        {
+          "cls": "mask-inner",
+          "text": "Kapan terakhir",
+          "top": 340,
+          "bottom": 432,
+          "left": 72,
+          "right": 960
+        },
+        {
+          "cls": "mask-inner",
+          "text": "kamu cek yang ada",
+          "top": 432,
+          "bottom": 525,
+          "left": 72,
+          "right": 960
+        },
+        {
+          "cls": "mask-inner",
+          "text": "di bawah appmu?",
+          "top": 525,
+          "bottom": 617,
+          "left": 72,
+          "right": 960
+        },
+        {
+          "cls": "accent",
+          "text": "bawah appmu?",
+          "top": 518,
+          "bottom": 624,
+          "left": 167,
+          "right": 810
+        },
+        {
+          "cls": "stack-layer",
+          "text": "Aplikasimu rapi",
+          "top": 660,
+          "bottom": 760,
+          "left": 160,
+          "right": 920
+        },
+        {
+          "cls": "span",
+          "text": "Aplikasimu",
+          "top": 688,
+          "bottom": 733,
+          "left": 424,
+          "right": 656
+        },
+        {
+          "cls": "stack-layer",
+          "text": "Next.js",
+          "top": 776,
+          "bottom": 876,
+          "left": 160,
+          "right": 920
+        },
+        {
+          "cls": "span",
+          "text": "Next.js",
+          "top": 804,
+          "bottom": 849,
+          "left": 459,
+          "right": 621
+        },
+        {
+          "cls": "stack-layer",
+          "text": "sharp",
+          "top": 892,
+          "bottom": 992,
+          "left": 160,
+          "right": 920
+        },
+        {
+          "cls": "span",
+          "text": "sharp",
+          "top": 920,
+          "bottom": 965,
+          "left": 482,
+          "right": 598
+        },
+        {
+          "cls": "stack-layer",
+          "text": "librsvg",
+          "top": 1008,
+          "bottom": 1108,
+          "left": 160,
+          "right": 920
+        },
+        {
+          "cls": "span",
+          "text": "librsvg",
+          "top": 1036,
+          "bottom": 1081,
+          "left": 459,
+          "right": 621
+        },
+        {
+          "cls": "sub-pill",
+          "text": "Kapan terakhir kamu cek",
+          "top": 1290,
+          "bottom": 1399,
+          "left": 191,
+          "right": 889
+        }
+      ]
+    }
+  },
+  "subtitleIssues": []
+}

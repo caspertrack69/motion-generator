@@ -1,0 +1,41 @@
+# ── Node / Vite ─────────────────────────
+node_modules/
+dist/
+.vite/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-error.log*
+
+# ── Hasil render (besar & bisa dibuat ulang) ──
+frames/
+out/
+.cache/
+*.mp4
+*.mov
+*.webm
+
+# ── Playwright ──────────────────────────
+test-results/
+playwright-report/
+playwright/.cache/
+
+# ── Python / Whisper (align.py) ─────────
+.venv/
+venv/
+__pycache__/
+*.pyc
+models/
+
+# ── Secret & lingkungan ─────────────────
+.env
+.env.*
+!.env.example
+
+# ── OS / editor ─────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
