@@ -1,6 +1,15 @@
-# 2 Celah RCE Kritis di Next.js — Motion Graphic
+# Motion Generator
 
-Animasi vertikal 1080×1920, 30 fps, ±62 detik. Dibangun dengan Vite, vanilla JS, GSAP, dan visual inline SVG/CSS. Timeline master bersifat paused dan seekable sehingga render deterministik.
+Motion Generator adalah generator motion graphic vertikal 1080×1920, 30 fps,
+dibangun dengan Vite, vanilla JS, GSAP, dan visual inline SVG/CSS. Setiap video
+punya folder sendiri di `videos/<slug>/`; isi visual diambil dari `scenes.json`,
+bukan dari kode.
+
+Timeline master bersifat paused dan seekable, sehingga render deterministik per
+frame. Tidak ada aset audio/video eksternal yang diunduh saat runtime.
+
+Video contoh: `nextjs-rce` — "2 Celah RCE Kritis di Next.js" (8 scene, ±96 detik
+mengikuti voice over).
 
 ## Menjalankan
 
@@ -9,39 +18,101 @@ npm install
 npm run dev
 ```
 
-Buka URL yang ditampilkan Vite.
+Buka URL yang ditampilkan Vite. Parameter URL:
 
+- `?video=<slug>` — pilih video dari `videos/<slug>/` (default `nextjs-rce`).
 - `?dev=1` — stage di-scale agar muat viewport, plus tombol play/pause dan scrubber.
 - `?render=1` — stage persis 1080×1920 tanpa scale dan tanpa UI dev.
 - `?safe=1` — overlay zona aman dari `style-spec.md`.
 
-## Render video
+Contoh: `?video=nextjs-rce&dev=1`.
 
-```bash
-npm run render
+## Perintah
+
+| Perintah                              | Fungsi                                                        |
+| ------------------------------------- | ------------------------------------------------------------- |
+| `npm run dev`                         | Vite dev server                                               |
+| `npm run build`                       | Build produksi ke `dist/`                                     |
+| `npm run preview`                     | Pratinjau hasil build                                         |
+| `npm run validate`                    | Validasi semua data video di `videos/`                        |
+| `npm run validate -- --video <slug>`  | Validasi satu video                                           |
+| `npm run render`                      | Render video default ke `out/<slug>.mp4`                      |
+| `npm run render -- --video <slug>`    | Render video lain                                             |
+| `npm run render:silent`               | Render tanpa audio, walau `voiceover.mp3` ada                 |
+
+Render memakai Vite preview + Playwright + FFmpeg. Hasil: H.264, 1080×1920,
+30 fps, audio AAC 192k bila `videos/<slug>/voiceover.mp3` tersedia. Frame PNG
+sementara ditulis ke `frames/`. Paket `ffmpeg-static` dipakai sebagai default;
+set `FFMPEG_PATH` untuk memakai binary lain.
+
+## Struktur
+
+```
+index.html
+src/
+  main.js            pemuatan video per slug, master timeline, kontrak seek
+  templates/         builder scene per template + registry
+    index.js         daftar template yang tersedia
+    shared.js        helper teks/segment/eyebrow
+    hook_server.js   explain_flow.js   gauge.js   codecard.js
+    stack.js         checklist.js      closing.js
+  timing.js          beat per template + scaling durasi
+  stackSequence.js   koreografi diagram stack persisten
+  components.js      kartu, chip, gauge, code card, stack, checklist
+  subtitles.js       subtitle dari word timing, fallback proporsional
+  icons.js           ikon SVG
+  tokens.css         token warna
+  styles.css         layout & komponen
+videos/
+  <slug>/
+    scenes.json          isi, template, dan timing desain (wajib)
+    voiceover.mp3        audio final (opsional)
+    timing.json          start/end hasil align.py (opsional)
+    timing.override.json koreksi manual start/end (opsional)
+    words.json           timestamp per kata hasil align.py (opsional)
+    script.md            naskah (dokumentasi)
+docs/
+  templates.md       kontrak data tiap template scene
+scripts/
+  validate.mjs       validasi scenes.json + file timing/words
+  render.mjs         pipeline Vite preview + Playwright + FFmpeg
+  align.py           faster-whisper: timing.json + words.json dari voiceover
+  qa-frame.mjs       render/bandingkan frame pada waktu tertentu
+  qa.mjs             cek layout, font, subtitle, determinisme (legacy: timing 62 s)
+  qa-state.mjs       cek visibilitas scene/stack di batas waktu (legacy: timing 62 s)
+  requirements.txt   dependensi Python untuk align.py
 ```
 
-Menghasilkan `out/nextjs-rce.mp4` (H.264, 1080×1920, 30 fps). Frame PNG sementara ditulis ke `frames/`.
+Kontrak isi tiap template dijelaskan di [`docs/templates.md`](docs/templates.md).
 
-- Jika `assets/audio/voiceover.mp3` tersedia, audio otomatis di-mux.
-- Untuk render tanpa audio secara eksplisit: `npm run render:silent`.
-- Butuh FFmpeg. Paket `ffmpeg-static` dipakai sebagai default; set `FFMPEG_PATH` untuk memakai binary lain.
+## Menambah video
 
-## Mengganti audio
+1. Buat `videos/<slug>/scenes.json` dengan `meta`, `scenes[]`, dan blok `stack`
+   bila memakai template `stack`.
+2. Letakkan voice over di `videos/<slug>/voiceover.mp3`.
+3. Jalankan `npm run validate -- --video <slug>`.
+4. Selaraskan timing ke audio (lihat di bawah).
+5. Pratinjau dengan `?video=<slug>&dev=1`, lalu render dengan
+   `npm run render -- --video <slug>`.
 
-Letakkan file voice over final di `assets/audio/voiceover.mp3`, lalu sinkronkan timing scene ke audio:
+Slug harus cocok dengan `^[A-Za-z0-9][A-Za-z0-9._-]*$`.
+
+## Mengganti audio / menyelaraskan timing
 
 ```bash
 python -m venv .venv
 .venv\Scripts\python -m pip install -r scripts/requirements.txt
-.venv\Scripts\python scripts\align.py
+.venv\Scripts\python scripts\align.py --video <slug>
 ```
 
-`align.py` mentranskrip audio (faster-whisper, language `id`, word timestamps), mencocokkan 3-5 kata pembuka tiap scene, lalu menulis `timing.json` (start/end per scene) dan `words.json` (timestamp per kata). Gunakan `--model medium` untuk akurasi lebih tinggi. Setelah itu jalankan `npm run render`. Tanpa file audio, video tetap dirender tanpa audio.
+`align.py` mentranskrip audio (faster-whisper, language `id`, word timestamps),
+mencocokkan 3–5 kata pembuka tiap scene, lalu menulis `timing.json` (start/end
+per scene) dan `words.json` (timestamp per kata) di folder video tersebut.
+Gunakan `--model medium` untuk akurasi lebih tinggi. Tanpa file audio, video
+tetap dirender tanpa audio.
 
-## Mengubah timing
-
-Prioritas timing: `timing.override.json` → `timing.json` → `scenes.json`. `timing.json` hasil `align.py` otomatis dipakai bila ada; nilai di dalamnya menimpa `scenes.json`. Untuk koreksi manual kecil tanpa mengubah hasil align, isi `timing.override.json`:
+Prioritas timing: `timing.override.json` → `timing.json` → `scenes.json`.
+Untuk koreksi manual kecil tanpa mengubah hasil align:
 
 ```json
 {
@@ -52,33 +123,30 @@ Prioritas timing: `timing.override.json` → `timing.json` → `scenes.json`. `t
 }
 ```
 
-Hanya `start`/`end` yang diberikan akan dioverride; scene lain memakai nilai dari `scenes.json`/`timing.json`. Durasi total mengikuti `end` scene terakhir. Beat animasi di dalam scene diskalakan lewat `src/timing.js`, lalu seluruh timeline scene diskalakan ke durasi audio (`sceneTl.duration()` di `src/main.js`).
-
-## Struktur
-
-```
-index.html
-src/
-  main.js            bootstrap, master timeline, kontrak seek
-  tokens.css         token warna
-  styles.css         layout & komponen
-  subtitles.js       engine subtitle (word timing dari words.json, fallback proporsional)
-  icons.js           ikon SVG
-  components.js      kartu, chip, gauge, code card, stack, checklist
-  timing.js          beat per scene + override
-  stackSequence.js   koreografi stack persisten s05–s08
-  scenes/            s01–s08
-scripts/
-  align.py           faster-whisper: timing.json + words.json dari voiceover
-  requirements.txt   dependensi Python untuk align.py
-  render.mjs         pipeline Vite preview + Playwright + FFmpeg
-  qa.mjs             cek layout, font, subtitle, determinisme
-  qa-state.mjs       cek visibilitas scene/stack di batas waktu
-assets/audio/        voiceover.mp3 (opsional)
-timing.json          start/end scene hasil align.py (opsional)
-words.json           timestamp per kata hasil align.py (opsional)
-```
+Hanya `start`/`end` yang diberikan yang dioverride. Durasi total mengikuti
+`end` scene terakhir. Beat animasi di dalam scene diskalakan lewat
+`src/timing.js`, lalu seluruh timeline scene diskalakan ke durasi audio di
+`src/main.js`.
 
 ## Kontrak timeline
 
-`window.__duration`, `window.__ready`, dan `window.__seek(t)` tersedia untuk pipeline render. Setiap scene mengembalikan timeline relatif 0 dan ditempel ke master pada `scene.time.start`.
+`window.__duration`, `window.__ready`, dan `window.__seek(t)` tersedia untuk
+pipeline render. Setiap template mengembalikan timeline relatif 0; `main.js`
+menempelkannya ke master pada `scene.time.start` dan mengatur visibilitas
+scene/stack saat seek.
+
+## QA frame
+
+Untuk membandingkan hasil visual tanpa merender video penuh:
+
+```bash
+node scripts/qa-frame.mjs --out .qa/frames --video <slug> --times 5,20,40
+node scripts/qa-frame.mjs --out .qa/frames --video <slug> --times 5,20,40 --compare .qa/reference
+```
+
+Perintah kedua membandingkan piksel dan keluar dengan kode 1 bila ada
+perbedaan. Artefak di `.qa/`, `frames/`, `out/`, dan `dist/` tidak di-commit.
+
+## Lisensi
+
+MIT — lihat [`LICENSE`](LICENSE).
